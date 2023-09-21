@@ -1,37 +1,34 @@
 <!DOCTYPE html>
-<html lang="de">
-
+<html lang="en">
 <head>
-    <title>Hotel-Bacher</title>
     <meta charset="UTF-8">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="description" content="Hotel Bacher Buchungsplatform">
-    <meta name="author" content="Philipp Huber/Matthias Teuschl">
-    <meta http-equiv="refresh" content="30">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        body {
-            background-color: powderblue;
-        }
-    </style>
+    <title>Formulare</title>
 </head>
-
 <body>
-    <header>
-        <h1>Hotel-Bacher</h1>
-    </header>
-    <main>
-        <figure>
-            <img src="img/Hotel.jpg" alt="Bild des Hotel-Bacher" style="width:768px;height:568px;">
-        </figure>
-        <!--Kommentar-->
-    </main>
-    <footer>
-        <a href="./impressum.html">Impressum</a>
-        <a href="./hilfe.html">Hilfe</a>
-        <p>&copy 2023</p>
-    </footer>
-</body>
+    <form action="./index.html" method="POST">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Name" />
+        </div>
 
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="E-Mail Address" />
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input required type="password" id="password" name="password" placeholder="*****" />
+        </div>
+
+        <div>
+            <button type="reset">Reset</button>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+    <!--
+        Mit ! und dann Tab kann man sich die Grundstruktur erzeugen lassen
+    -->
+</body>
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="./Newsletter.html" method="POST">
+        <div>
+            <label for="headline">Headline</label>
+            <input required type="text" id="headline" name="headline" placeholder="Headline" />
+        </div>
+
+        <div>
+            <label for="summary">Summary</label>
+            <textarea id="summary" rows="3" cols="50" name="summary" placeholder="Summary"></textarea>
+        </div>
+
+        <div>
+            <label for="fulltext">Fulltext</label>
+            <textarea required id="fulltext" rows="10" cols="50" name="Fulltext" placeholder="Fulltext"></textarea>
+        </div>
+
+        <div>
+            <label for="picture">Picture</label>
+            <input optional type="file" accept="image/*" id="picture" name="Picture" placeholder="Picture" />
+        </div>
+
+        <select required id="Tags" name="Tags">
+            <option value="" disabled selected>Select a Tag</option>
+            <option>Wellness</option>
+            <option>Sport</option>
+            <option>Kultur</option>
+        </select>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    
+</body>
+</html>

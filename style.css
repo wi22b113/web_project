@@ -1,0 +1,121 @@
+body {
+    background-color: powderblue;
+    color: black;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: black;
+    font-family: 'Oswald', sans-serif;
+    font-size: 300%;
+}
+
+header h1 {
+    color: black;
+    /*font-family: 'Oswald', sans-serif;*/
+    font-family: 'Playfair Display', serif;
+    font-size: 300%;
+    text-align: center;
+}
+
+h2 {
+    color: black;
+    font-family: 'Oswald', sans-serif;
+    font-size: 200%;
+}
+
+h3 {
+    color: black;
+    font-family: 'Oswald', sans-serif;
+    font-size: 150%;
+}
+
+h4 {
+    color: black;
+    font-family: 'Oswald', sans-serif;
+    font-size: 120%;
+}
+
+p {
+    color: black;
+    font-size: 100%;
+}
+
+main, header {
+    width: 1500px;
+    margin: auto;
+    /* border: 1px red solid; */
+    /* wenn man alles zentrieren möchte: text-align: center;*/
+    
+}
+
+footer {
+    color: black;
+    font-size: 100%;
+    text-align: center;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+  .directorpictures {
+    width:200px;
+    height:300px;
+  }
+
+  nav {
+    /* background-color: #fde992; */
+    width: 778px;
+    margin:auto;
+  }
+
+  nav ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    display: flex;
+  }
+
+  nav a {
+    font-size: 130%;
+    width: 100;
+    display: block;
+    text-align: center;
+  }
+
+  nav li {
+    padding-right: 57px;
+  }
+
+  .navlinks a {
+    display: block;
+    width: 150px;
+    height: 30px;
+    color: black;
+    background-color: rgb(177, 189, 202);
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    padding: 5px 0 0 0;
+    font-size: 100%;
+    border: 1px  rgb(177, 189, 202) solid;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .navlinks a:hover {
+    color: white;
+    background-color: rgb(114, 114, 130);
+  }
+
+
+  @media (max-width:1280px){
+    main {
+        width:100%;
+    }
+  }

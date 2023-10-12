@@ -2,7 +2,7 @@
 <html lang="de">
 
 <head>
-    <title>Login</title>
+    <title>Registrierung</title>
 
     <meta charset="UTF-8">
     <meta name="keywords" content="HTML, CSS, JavaScript">
@@ -24,7 +24,7 @@
 
 <body>
     <header>
-        <h1>Login</h1>
+        <h1>Registrierung</h1>
         <nav>
             <ul class="navlinks">
                 <li><a href="./index.html">Startseite</a></li>
@@ -37,8 +37,31 @@
     </header>
     <main>
         <div class="col-1 center">
-            <h2>Login</h2>
+            <h2>Registrierung</h2>
             <form action="./login.html" method="POST">
+
+                <lable for="anrede">Anrede: </lable><br>
+                <select required id="anrede" name="Anrede">
+                    <option value="" disabled selected>Wählen Sie eine Anrede</option>
+                    <option>Herr</option>
+                    <option>Frau</option>
+                </select>
+
+                <div>
+                    <label for="vorname">Vorname: </label><br>
+                    <input required type="text" id="vorname" name="vorname" placeholder="Max" />
+                </div>
+
+                <div>
+                    <label for="nachname">Nachname: </label><br>
+                    <input required type="text" id="nachname" name="vorname" placeholder="Mustermann" />
+                </div>
+
+                <div>
+                    <label for="e-mail">E-Mail: </label><br>
+                    <input required type="email" id="e-mail" name="e-mail" placeholder="mustermail@domain.com" />
+                </div>
+
                 <div>
                     <label for="username">Username: </label><br>
                     <input required type="text" id="username" name="username" placeholder="Max123" />
@@ -48,8 +71,16 @@
                     <label for="password">Passwort:</label><br>
                     <input required type="password" id="password" name="password" placeholder="*****" />
                 </div>
-                <button type="reset">Reset</button>
-                <button type="submit">Login</button>
+
+                <div>
+                    <label for="password_r">Passwort wiederholen:</label><br>
+                    <input required type="password" id="password_r" name="password" placeholder="*****" />
+                </div>
+
+                <div>
+                    <button type="reset">Reset</button>
+                    <button type="submit">Login</button>
+                </div>
             </form>
         </div>
     </main>

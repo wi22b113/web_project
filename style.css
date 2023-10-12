@@ -1,121 +1,198 @@
-body {
-    background-color: powderblue;
-    color: black;
-    font-size: 100%;
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
 }
 
-h1 {
-    color: black;
-    font-family: 'Oswald', sans-serif;
-    font-size: 300%;
+/* For mobile devices*/
+[class*="col-"] {
+  width: 100%;
 }
 
-header h1 {
-    color: black;
-    /*font-family: 'Oswald', sans-serif;*/
-    font-family: 'Playfair Display', serif;
-    font-size: 300%;
-    text-align: center;
-}
+@media only screen and (min-width:768px) {
 
-h2 {
-    color: black;
-    font-family: 'Oswald', sans-serif;
-    font-size: 200%;
-}
+  /*For Desktop*/
+  .col-1 {
+    width: 8.33%;
+  }
 
-h3 {
-    color: black;
-    font-family: 'Oswald', sans-serif;
-    font-size: 150%;
-}
+  .col-2 {
+    width: 16.66%;
+  }
 
-h4 {
-    color: black;
-    font-family: 'Oswald', sans-serif;
-    font-size: 120%;
-}
+  .col-3 {
+    width: 25%;
+  }
 
-p {
-    color: black;
-    font-size: 100%;
-}
+  .col-4 {
+    width: 33.33%;
+  }
 
-main, header {
-    width: 1500px;
-    margin: auto;
-    /* border: 1px red solid; */
-    /* wenn man alles zentrieren möchte: text-align: center;*/
-    
-}
+  .col-5 {
+    width: 41.66%;
+  }
 
-footer {
-    color: black;
-    font-size: 100%;
-    text-align: center;
-}
-
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  .col-6 {
     width: 50%;
   }
 
-  .directorpictures {
-    width:200px;
-    height:300px;
+  .col-7 {
+    width: 58.33%;
   }
 
-  nav {
-    /* background-color: #fde992; */
-    width: 778px;
-    margin:auto;
+  .col-8 {
+    width: 66.66%;
   }
 
-  nav ul {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-    display: flex;
+  .col-9 {
+    width: 75%;
   }
 
-  nav a {
-    font-size: 130%;
-    width: 100;
-    display: block;
-    text-align: center;
+  .col-10 {
+    width: 83.33%;
   }
 
-  nav li {
-    padding-right: 57px;
+  .col-11 {
+    width: 91.66%;
   }
 
-  .navlinks a {
-    display: block;
-    width: 150px;
-    height: 30px;
-    color: black;
-    background-color: rgb(177, 189, 202);
-    border: none;
-    text-decoration: none;
-    text-align: center;
-    padding: 5px 0 0 0;
-    font-size: 100%;
-    border: 1px  rgb(177, 189, 202) solid;
-    font-family: 'Oswald', sans-serif;
+  .col-12 {
+    width: 100%;
   }
-
-  .navlinks a:hover {
-    color: white;
-    background-color: rgb(114, 114, 130);
-  }
+}
 
 
-  @media (max-width:1280px){
-    main {
-        width:100%;
-    }
-  }
+body {
+  background-color: powderblue;
+  /*powderblue rgb(231, 233, 150);rgb(142, 222, 117);#bacec1*/
+  color: black;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 300%;
+}
+
+header h1 {
+  color: black;
+  /*font-family: 'Oswald', sans-serif;*/
+  font-family: 'Playfair Display', serif;
+  font-size: 300%;
+  text-align: center;
+}
+
+h2 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 200%;
+}
+
+h3 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 150%;
+}
+
+h4 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 120%;
+}
+
+p {
+  color: black;
+  font-size: 100%;
+}
+
+/*
+main,
+header {
+  width: 1500px;
+  margin: auto;
+  border: 1px red solid; 
+  wenn man alles zentrieren möchte: text-align: center;
+}
+*/
+
+
+
+
+.center {
+  display: block;
+  margin: auto;
+}
+
+.managingdirectors {
+  float: left;
+}
+
+.directorpictures {
+  width: 200px;
+  height: 300px;
+}
+
+/* nav {
+  background-color: #fde992;
+  margin: auto;  
+} */
+
+nav ul {
+  margin-left: auto;
+  margin-right: auto;
+  list-style-type: none;
+  /* margin-left: 0; */
+  /* padding-left: 0; */
+  display: flex;
+}
+
+.faq,
+.wf {
+  padding: 10px;
+  float: left;
+  height: 650px;
+}
+
+
+/* nav a {
+  font-size: 130%;
+  width: 100;
+  display: block;
+  text-align: center;
+} */
+
+nav li {
+  padding-right: 170px;
+}
+
+.navlinks a {
+  display: block;
+  width: 150px;
+  height: 30px;
+  color: black;
+  background-color: rgb(177, 189, 202);
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  padding: 5px 0 0 0;
+  font-size: 100%;
+  border: 1px rgb(177, 189, 202) solid;
+  font-family: 'Oswald', sans-serif;
+}
+
+.navlinks a:hover {
+  color: white;
+  background-color: rgb(114, 114, 130);
+}
+
+footer {
+  color: black;
+  font-size: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.fh {
+  height: 500px;
+}

@@ -61,7 +61,7 @@
 
 
 body {
-  background-color: powderblue;
+  background-color: white;
   /*powderblue rgb(231, 233, 150);rgb(142, 222, 117);#bacec1*/
   color: black;
   font-size: 100%;
@@ -81,6 +81,7 @@ header h1 {
   font-family: 'Playfair Display', serif;
   font-size: 300%;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 h2 {
@@ -116,9 +117,6 @@ header {
 }
 */
 
-
-
-
 .center {
   display: block;
   margin: auto;
@@ -133,20 +131,6 @@ header {
   height: 300px;
 }
 
-/* nav {
-  background-color: #fde992;
-  margin: auto;  
-} */
-
-nav ul {
-  margin-left: auto;
-  margin-right: auto;
-  list-style-type: none;
-  /* margin-left: 0; */
-  /* padding-left: 0; */
-  display: flex;
-}
-
 .faq,
 .wf {
   padding: 10px;
@@ -154,45 +138,15 @@ nav ul {
   height: 650px;
 }
 
-
-/* nav a {
-  font-size: 130%;
-  width: 100;
-  display: block;
-  text-align: center;
-} */
-
-nav li {
-  padding-right: 170px;
-}
-
-.navlinks a {
-  display: block;
-  width: 150px;
-  height: 30px;
-  color: black;
-  background-color: rgb(177, 189, 202);
-  border: none;
-  text-decoration: none;
-  text-align: center;
-  padding: 5px 0 0 0;
-  font-size: 100%;
-  border: 1px rgb(177, 189, 202) solid;
-  font-family: 'Oswald', sans-serif;
-}
-
-.navlinks a:hover {
-  color: white;
-  background-color: rgb(114, 114, 130);
-}
-
 footer {
   color: black;
   font-size: 100%;
   text-align: center;
   width: 100%;
+  margin-top: 50px;
 }
 
 .fh {
   height: 500px;
 }
+

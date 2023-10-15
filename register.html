@@ -70,59 +70,56 @@
         </nav>
     </header>
     <main>
-        <div class=" col-1 center">
-                                        <h2>Registrierung</h2>
-                                        <form action="./login.html" method="POST">
 
-                                            <lable for="anrede">Anrede: </lable><br>
-                                            <select required id="anrede" name="Anrede">
-                                                <option value="" disabled selected>Wählen Sie eine Anrede</option>
-                                                <option>Herr</option>
-                                                <option>Frau</option>
-                                            </select>
+                <h2 class="center mb-3">Registrierung</h2>
+                <form action="./register.html" method="POST">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div>
+                                    <label for="anrede"></label>
+                                    <select required class="form-select border-primary mb-3" id="anrede" aria-label="Anrede">
+                                        <option value "" disabled selected>Anrede</option>
+                                        <option>Herr</option>
+                                        <option>Frau</option>
+                                    </select>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control border-primary" id="vorname" placeholder="a">
+                                    <label for="vorname">Vorname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control border-primary" id="nachname" placeholder="a">
+                                    <label for="nachname">Nachname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control border-primary" id="email" placeholder="a">
+                                    <label for="email">Email Adresse</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control border-primary" id="username" placeholder="a">
+                                    <label for="username">Username</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control border-primary" id="password1" placeholder="a">
+                                    <label for="password1">Passwort</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control border-primary" id="password2" placeholder="a">
+                                    <label for="password2">Passwort überprüfen</label>
+                                </div>
+                                <div class="col mb-3">
+                                    <button class="btn btn-outline-danger" type="reset">Reset</button>
+                                    <button class="btn btn-outline-primary" type="submit">Registrieren</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-                                            <div>
-                                                <label for="vorname">Vorname: </label><br>
-                                                <input required type="text" id="vorname" name="vorname"
-                                                    placeholder="Max" />
-                                            </div>
 
-                                            <div>
-                                                <label for="nachname">Nachname: </label><br>
-                                                <input required type="text" id="nachname" name="vorname"
-                                                    placeholder="Mustermann" />
-                                            </div>
 
-                                            <div>
-                                                <label for="e-mail">E-Mail: </label><br>
-                                                <input required type="email" id="e-mail" name="e-mail"
-                                                    placeholder="mustermail@domain.com" />
-                                            </div>
 
-                                            <div>
-                                                <label for="username">Username: </label><br>
-                                                <input required type="text" id="username" name="username"
-                                                    placeholder="Max123" />
-                                            </div>
-
-                                            <div>
-                                                <label for="password">Passwort:</label><br>
-                                                <input required type="password" id="password" name="password"
-                                                    placeholder="*****" />
-                                            </div>
-
-                                            <div>
-                                                <label for="password_r">Passwort wiederholen:</label><br>
-                                                <input required type="password" id="password_r" name="password"
-                                                    placeholder="*****" />
-                                            </div>
-
-                                            <div>
-                                                <button type="reset">Reset</button>
-                                                <button type="submit">Login</button>
-                                            </div>
-                                        </form>
-                </div>
                 </main>
                 <footer>
                     &copy 2023

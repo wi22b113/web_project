@@ -27,58 +27,20 @@
 
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="./index.html">Hotel Tramonto</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Suites & Rooms
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="./sr_master_suite.html">Master Suite</a></li>
-                                    <li><a class="dropdown-item" href="./sr_junior_suite.html">Junior Suite</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="./sr_superior_room.html">Superior Room</a></li>
-                                    <li><a class="dropdown-item" href="./sr_luxury_room.html">Luxury Room</a></li>
-                                    <li><a class="dropdown-item" href="./sr_luxury_e_room.html">Luxury Extended Room</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./impressum.html">Impressum</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./hilfe.html"">Hilfe</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./login.html"">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./register.html"">Registrierung</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <?php
+            $currentPage = 'Registrierung';
+            include "header.php";
+            ?>
         </header>
         <main>
             <h2 class="center mb-3">Registrierung</h2>
-            <form action="./register.html" method="POST">
+            <form action="./register.php" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div>
                                 <label for="anrede"></label>
-                                <select required class="form-select border-primary mb-3" id="anrede" aria-label="Anrede">
+                                <select class="form-select border-primary mb-3" id="anrede" aria-label="Anrede">
                                     <option value "" disabled selected>Anrede</option>
                                     <option>Herr</option>
                                     <option>Frau</option>
@@ -93,19 +55,19 @@
                                 <label for="nachname">Nachname</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control border-primary" id="email" placeholder="a">
+                                <input type="email" class="form-control border-primary" id="email" placeholder="a" required>
                                 <label for="email">Email Adresse</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control border-primary" id="username" placeholder="a">
+                                <input type="text" class="form-control border-primary" id="username" placeholder="a" required>
                                 <label for="username">Username</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control border-primary" id="password1" placeholder="a">
+                                <input type="password" class="form-control border-primary" id="password1" placeholder="a" required>
                                 <label for="password1">Passwort</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control border-primary" id="password2" placeholder="a">
+                                <input type="password" class="form-control border-primary" id="password2" placeholder="a" required>
                                 <label for="password2">Passwort überprüfen</label>
                             </div>
                             <div class="col mb-3">

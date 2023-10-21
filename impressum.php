@@ -27,48 +27,10 @@
 
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="./index.html">Hotel Tramonto</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Suites & Rooms
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="./sr_master_suite.html">Master Suite</a></li>
-                                    <li><a class="dropdown-item" href="./sr_junior_suite.html">Junior Suite</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="./sr_superior_room.html">Superior Room</a></li>
-                                    <li><a class="dropdown-item" href="./sr_luxury_room.html">Luxury Room</a></li>
-                                    <li><a class="dropdown-item" href="./sr_luxury_e_room.html">Luxury Extended Room</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./impressum.html">Impressum</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./hilfe.html"">Hilfe</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./login.html"">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="./register.html"">Registrierung</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <?php
+            $currentPage = 'Impressum';
+            include "header.php";
+            ?>
             <h1>Impressum</h1>
         </header>
         <main>
@@ -88,7 +50,7 @@
                         1010 Wien<br>
                         Österreich<br> <br>
                         Tel: +43 (0) 12345-6 <br>
-                        E-Mail: hotel-bacher@gmail.com<br><br>
+                        E-Mail: hotel-tramonto@gmail.com<br><br>
 
                         Kammerzugehörigkeit: Wirtschaftskammer Österreich, ÖHV <br>
                         Berufsverband: Österreichs Hotellerie <br>
@@ -101,7 +63,7 @@
                         Beschwerden an die Online Streitbeilegungsplattform der EU zu
                         richten: <a href="http://ec.europa.eu/odr">ec.europa.eu/odr</a>.<br>
                         Sie können allfällige Beschwerde auch an die oben angegebene <a
-                            href="mailto:hotel-bacher@gmail.com">E-Mail-Adresse</a> richten.<br><br>
+                            href="mailto:hotel-tramonto@gmail.com">E-Mail-Adresse</a> richten.<br><br>
 
                         Geschäftsführer: Philipp Huber, Matthias Teuschl <br>
                         Geschäftsanteile: Philipp Huber (50%), Matthias Teuschl (50%)
@@ -115,7 +77,7 @@
                             <div class="col-md-6">
                                 <article>
                                     <figure>
-                                        <img class="directorpictures" src="img/PhilippH.JPG"
+                                        <img class="directorpictures" src="img/PhilippH.jpg"
                                             alt="Bild von Philipp Huber">
                                         <figcaption>Philipp Huber</figcaption>
                                     </figure>

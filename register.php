@@ -33,46 +33,133 @@
             ?>
         </header>
         <main>
+            <?php
+                // define variables and set to empty values
+
+                $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
+                $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = "";
+
+                function validate_input($data) {
+                    $data = trim($data);
+                    $data = stripslashes($data);
+                    $data = htmlspecialchars($data);
+                    return $data;
+                }
+
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                    $gender = $_POST["gender"];
+                    
+                    $fname= validate_input($_POST["vorname"]);
+                    // check if firstname only contains letters and whitespace
+                    if (!preg_match("/^[a-zA-Z-' ]*$/",$fname)) {
+                        $fnameErr = "Nur Buchstaben und Leerzeichen sind erlaubt";
+                    }
+
+                    $lname= validate_input($_POST["nachname"]);
+                    // check if lastname only contains letters and whitespace
+                    if (!preg_match("/^[a-zA-Z-' ]*$/",$lname)) {
+                        $lnameErr = "Nur Buchstaben und Leerzeichen sind erlaubt";
+                    }
+
+                    if (empty($_POST["email"])) {
+                        $emailErr = "Bitte wählen Sie eine Email";
+                    } else {
+                        $email = validate_input($_POST["email"]);
+                        // check if email is well-formed
+                        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            $emailErr = "Ungültiges Email Format";
+                        }
+                    }
+                    
+                    if (empty($_POST["username"])) {
+                        $usernameErr = "Bitte wählen Sie einen Usernamen";
+                    } else {
+                        $username = validate_input($_POST["username"]);
+                    }
+
+                    if (empty($_POST["password1"])) {
+                        $passwd1Err = "Bitte wählen Sie ein Passwort";
+                    } else {
+                        $passwd1 = validate_input($_POST["password1"]);
+                    }
+
+                    if (empty($_POST["password2"])) {
+                        $passwd2Err = "Bitte wählen Sie ein Passwort";
+                    } else {
+                        $passwd2 = validate_input($_POST["password2"]);
+                    }
+                    if ($passwd1!=$passwd2){
+                        $passwd1Err = $passwd2Err = "Passwörter sind nicht gleich";
+                    }
+                }
+            ?>            
             <h2 class="center mb-3">Registrierung</h2>
-            <form action="./register.php" method="POST">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div>
-                                <label for="anrede"></label>
-                                <select class="form-select border-primary mb-3" id="anrede" aria-label="Anrede">
-                                    <option value "" disabled selected>Anrede</option>
-                                    <option>Herr</option>
-                                    <option>Frau</option>
+                                <label for="gender"></label>
+                                <select class="form-select border-primary mb-3" id="gender" name="gender" aria-label="gender">
+                                    <option value "" disabled selected>Geschlecht</option>
+                                    <option <?php if (isset($gender) && $gender=="weiblich") echo "selected";?> >weiblich</option>
+                                    <option <?php if (isset($gender) && $gender=="männlich") echo "selected";?>>männlich</option>
+                                    <option <?php if (isset($gender) && $gender=="divers") echo "selected";?>>divers</option>
                                 </select>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control border-primary" id="vorname" placeholder="a">
+                                <input type="text" class="form-control <?php if($fnameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="vorname" name="vorname" placeholder="a" value="<?php echo $fname;?>">
+                                <div class="invalid-feedback">
+                                    <?php if($fnameErr!=""){echo $fnameErr;} ?> 
+                                </div>
                                 <label for="vorname">Vorname</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control border-primary" id="nachname" placeholder="a">
+                                <input type="text" class="form-control <?php if($lnameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="nachname" name="nachname" placeholder="a" value="<?php echo $lname;?>">
+                                <div class="invalid-feedback">
+                                    <?php if($lnameErr!=""){echo $lnameErr;} ?> 
+                                </div>
                                 <label for="nachname">Nachname</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control border-primary" id="email" placeholder="a" required>
+                                <input type="email" class="form-control <?php if($emailErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="email" name="email" placeholder="a" value="<?php echo $email;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($emailErr!=""){echo $emailErr;} ?> 
+                                </div>
                                 <label for="email">Email Adresse</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control border-primary" id="username" placeholder="a" required>
+                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="a" value="<?php echo $username;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($usernameErr!=""){echo $usernameErr;} ?> 
+                                </div>
                                 <label for="username">Username</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control border-primary" id="password1" placeholder="a" required>
+                                <input type="password" class="form-control <?php if($passwd1Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password1" name="password1" placeholder="a" value="<?php echo $passwd1;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($passwd1Err!=""){echo $passwd1Err;} ?> 
+                                </div>
                                 <label for="password1">Passwort</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control border-primary" id="password2" placeholder="a" required>
+                                <input type="password" class="form-control <?php if($passwd2Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password2" name="password2" placeholder="a" value="<?php echo $passwd2;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($passwd2Err!=""){echo $passwd2Err;} ?> 
+                                </div>
                                 <label for="password2">Passwort überprüfen</label>
                             </div>
                             <div class="col mb-3">
                                 <button class="btn btn-outline-danger" type="reset">Reset</button>
                                 <button class="btn btn-outline-primary" type="submit">Registrieren</button>
+                                <h2>
+                                    <?php
+                                        if ($_SERVER["REQUEST_METHOD"] == "POST" and $fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr=="" and $passwd1Err=="" and $passwd2Err=="") {
+                                            echo "Erfolg!";            
+                                        }elseif($_SERVER["REQUEST_METHOD"] == "POST"){echo "kein Erfolg";}
+                                    ?>
+                                </h2>
                             </div>
                         </div>
                     </div>

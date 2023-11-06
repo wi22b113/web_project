@@ -33,22 +33,61 @@
             ?>
         </header>
         <main>
+            <?php
+                // define variables and set to empty values
+                $usernameErr = $passwdErr = "";
+                $username = $passwd = "";
+
+                function validate_input($data) {
+                    $data = trim($data);
+                    $data = stripslashes($data);
+                    $data = htmlspecialchars($data);
+                    return $data;
+                }
+
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    if (empty($_POST["username"])) {
+                        $usernameErr = "Bitte wählen Sie einen Usernamen";
+                    } else {
+                        $username = validate_input($_POST["username"]);
+                    }
+                
+                    if (empty($_POST["password"])) {
+                        $passwdErr = "Bitte wählen Sie ein Passwort";
+                    } else {
+                        $passwd = validate_input($_POST["password"]);
+                    }
+                }
+            ?>
             <h2 class="center mb-3">Login</h2>
-            <form action="./login.php" method="POST">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control border-primary" id="username" placeholder="Username" required>
+                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $username;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($usernameErr!=""){echo $usernameErr;} ?> 
+                                </div>
                                 <label for="username">Username</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control border-primary" id="password" placeholder="Password" required>
+                                <input type="password" class="form-control <?php if($passwdErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password" name="password" placeholder="Password" value="<?php echo $passwd;?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($passwdErr!=""){echo $passwdErr;} ?> 
+                                </div>
                                 <label for="password">Passwort</label>
                             </div>
                             <div class="col mb-3">
                                 <button class="btn btn-outline-danger" type="reset">Reset</button>
                                 <button class="btn btn-outline-primary" type="submit">Login</button>
+                                <h2>
+                                    <?php
+                                        if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="") {
+                                            echo "Erfolg!";            
+                                        }elseif($_SERVER["REQUEST_METHOD"] == "POST"){echo "kein Erfolg";}
+                                    ?>
+                                </h2>
                             </div>
                         </div>
                     </div>

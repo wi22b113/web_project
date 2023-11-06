@@ -77,7 +77,7 @@
                             <div class="col-md-6">
                                 <article>
                                     <figure>
-                                        <img class="directorpictures" src="img/PhilippH.jpg"
+                                        <img class="directorpictures" src="img/ProfilePicture.png"
                                             alt="Bild von Philipp Huber">
                                         <figcaption>Philipp Huber</figcaption>
                                     </figure>
@@ -86,7 +86,7 @@
                             <div class="col-md-6">
                                 <article>
                                     <figure>
-                                        <img class="directorpictures" src="img/MatthiasT.JPG"
+                                        <img class="directorpictures" src="img/ProfilePicture.png"
                                             alt="Bild von Matthias Teuschl">
                                         <figcaption>Matthias Teuschl</figcaption>
                                     </figure>

@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    $user = [];
+    $user["john"] = "mypassword";
+    
+?>
+
 <!DOCTYPE html>
 <html lang="de">
     <head>
@@ -34,6 +41,7 @@
             ?>
         </header>
         <main>
+            <h2 class="center mb-3">Login</h2>
             <?php
                 // define variables and set to empty values
                 $usernameErr = $passwdErr = "";
@@ -52,41 +60,56 @@
                         $passwd = sanitize_input($_POST["password"]);
                     }
                 }
+
+                if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="" and $user[$username] === $passwd) {
+                    $_SESSION["user"] = $username;
+                }
             ?>
-            <h2 class="center mb-3">Login</h2>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $username;?>" required>
-                                <div class="invalid-feedback">
-                                    <?php if($usernameErr!=""){echo $usernameErr;} ?> 
+
+            <?php if (!isset($_SESSION["user"])): ?> 
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $username;?>" required>
+                                    <div class="invalid-feedback">
+                                        <?php if($usernameErr!=""){echo $usernameErr;} ?> 
+                                    </div>
+                                    <label for="username">Username</label>
                                 </div>
-                                <label for="username">Username</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input type="password" class="form-control <?php if($passwdErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password" name="password" placeholder="Password" value="<?php echo $passwd;?>" required>
-                                <div class="invalid-feedback">
-                                    <?php if($passwdErr!=""){echo $passwdErr;} ?> 
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control <?php if($passwdErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password" name="password" placeholder="Password" value="<?php echo $passwd;?>" required>
+                                    <div class="invalid-feedback">
+                                        <?php if($passwdErr!=""){echo $passwdErr;} ?> 
+                                    </div>
+                                    <label for="password">Passwort</label>
                                 </div>
-                                <label for="password">Passwort</label>
-                            </div>
-                            <div class="col mb-3">
-                                <button class="btn btn-outline-danger" type="reset">Reset</button>
-                                <button class="btn btn-outline-primary" type="submit">Login</button>
-                                <h2>
-                                    <?php
-                                        if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="") {
-                                            echo "Erfolg!";            
-                                        }elseif($_SERVER["REQUEST_METHOD"] == "POST"){echo "kein Erfolg";}
-                                    ?>
-                                </h2>
+                                <div class="col mb-3">
+                                    <button class="btn btn-outline-danger" type="reset">Reset</button>
+                                    <button class="btn btn-outline-primary" type="submit">Login</button>
+                                    <h3>
+                                        <?php
+                                            if($_SERVER["REQUEST_METHOD"] == "POST"){
+                                                echo "kein Erfolg";
+                                            }
+                                        ?>
+                                    </h3>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            <?php else: ?>  
+                <h3>
+                    Hello <?php 
+                    echo $_SESSION["user"]; 
+                    ?>
+                    <form action="logout.php" method="POST">
+                        <input type="submit" value="Logout" />
+                    </form>
+                </h3>
+            <?php endif ?> 
         </main>
         <footer>
             &copy 2023

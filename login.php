@@ -30,6 +30,7 @@
             <?php
             $currentPage = 'Login';
             include "header.php";
+            include "common_functions.php"
             ?>
         </header>
         <main>
@@ -38,24 +39,17 @@
                 $usernameErr = $passwdErr = "";
                 $username = $passwd = "";
 
-                function validate_input($data) {
-                    $data = trim($data);
-                    $data = stripslashes($data);
-                    $data = htmlspecialchars($data);
-                    return $data;
-                }
-
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (empty($_POST["username"])) {
                         $usernameErr = "Bitte wählen Sie einen Usernamen";
                     } else {
-                        $username = validate_input($_POST["username"]);
+                        $username = sanitize_input($_POST["username"]);
                     }
                 
                     if (empty($_POST["password"])) {
                         $passwdErr = "Bitte wählen Sie ein Passwort";
                     } else {
-                        $passwd = validate_input($_POST["password"]);
+                        $passwd = sanitize_input($_POST["password"]);
                     }
                 }
             ?>

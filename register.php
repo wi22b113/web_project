@@ -30,6 +30,7 @@
             <?php
             $currentPage = 'Registrierung';
             include "header.php";
+            include "common_functions.php"
             ?>
         </header>
         <main>
@@ -39,33 +40,26 @@
                 $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
                 $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = "";
 
-                function validate_input($data) {
-                    $data = trim($data);
-                    $data = stripslashes($data);
-                    $data = htmlspecialchars($data);
-                    return $data;
-                }
-
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $gender = $_POST["gender"];
                     
-                    $fname= validate_input($_POST["vorname"]);
+                    $fname= sanitize_input($_POST["vorname"]);
                     // check if firstname only contains letters and whitespace
-                    if (!preg_match("/^[a-zA-Z-' ]*$/",$fname)) {
-                        $fnameErr = "Nur Buchstaben und Leerzeichen sind erlaubt";
+                    if (preg_match("/\d/",$fname)) {
+                        $fnameErr = "Keine Ziffern erlaubt";
                     }
 
-                    $lname= validate_input($_POST["nachname"]);
+                    $lname= sanitize_input($_POST["nachname"]);
                     // check if lastname only contains letters and whitespace
-                    if (!preg_match("/^[a-zA-Z-' ]*$/",$lname)) {
-                        $lnameErr = "Nur Buchstaben und Leerzeichen sind erlaubt";
+                    if (preg_match("/\d/",$lname)) {
+                        $lnameErr = "Keine Ziffern erlaubt";
                     }
 
                     if (empty($_POST["email"])) {
                         $emailErr = "Bitte wählen Sie eine Email";
                     } else {
-                        $email = validate_input($_POST["email"]);
+                        $email = sanitize_input($_POST["email"]);
                         // check if email is well-formed
                         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                             $emailErr = "Ungültiges Email Format";
@@ -75,19 +69,19 @@
                     if (empty($_POST["username"])) {
                         $usernameErr = "Bitte wählen Sie einen Usernamen";
                     } else {
-                        $username = validate_input($_POST["username"]);
+                        $username = sanitize_input($_POST["username"]);
                     }
 
                     if (empty($_POST["password1"])) {
                         $passwd1Err = "Bitte wählen Sie ein Passwort";
                     } else {
-                        $passwd1 = validate_input($_POST["password1"]);
+                        $passwd1 = sanitize_input($_POST["password1"]);
                     }
 
                     if (empty($_POST["password2"])) {
                         $passwd2Err = "Bitte wählen Sie ein Passwort";
                     } else {
-                        $passwd2 = validate_input($_POST["password2"]);
+                        $passwd2 = sanitize_input($_POST["password2"]);
                     }
                     if ($passwd1!=$passwd2){
                         $passwd1Err = $passwd2Err = "Passwörter sind nicht gleich";

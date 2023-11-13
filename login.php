@@ -1,7 +1,44 @@
 <?php
+    include "common_functions.php";
     session_start();
     $user = [];
-    $user["john"] = "mypassword";
+    $user["admin"] = "admin";
+
+    // define variables and set to empty values
+    $usernameErr = $passwdErr = "";
+    $username = $passwd = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (empty($_POST["username"])) {
+            $usernameErr = "Bitte wählen Sie einen Usernamen";
+        } else {
+            $username = sanitize_input($_POST["username"]);
+        }
+    
+        if (empty($_POST["password"])) {
+            $passwdErr = "Bitte wählen Sie ein Passwort";
+        } else {
+            $passwd = sanitize_input($_POST["password"]);
+        }
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="" and $user[$username] === $passwd) {
+        $_SESSION["user"] = $username;
+        $_SESSION["gender"] = "männlich";
+        $_SESSION["firstname"] = "adminVorname";
+        $_SESSION["lastname"] = "adminNachname";
+        $_SESSION["email"] = "admin@email.com";
+        $_SESSION["password"] = $passwd;
+    }
+
+    if($_SERVER["REQUEST_METHOD"] == "GET"){
+        if(sanitize_input($_GET["logout"])==true){
+            session_unset();
+            session_destroy();
+            header("Location: login.php"); /* Redirect browser */
+            exit;
+        }
+    }
     
 ?>
 
@@ -37,36 +74,11 @@
             <?php
             $currentPage = 'Login';
             include "header.php";
-            include "common_functions.php"
             ?>
         </header>
         <main>
-            <h2 class="center mb-3">Login</h2>
-            <?php
-                // define variables and set to empty values
-                $usernameErr = $passwdErr = "";
-                $username = $passwd = "";
-
-                if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    if (empty($_POST["username"])) {
-                        $usernameErr = "Bitte wählen Sie einen Usernamen";
-                    } else {
-                        $username = sanitize_input($_POST["username"]);
-                    }
-                
-                    if (empty($_POST["password"])) {
-                        $passwdErr = "Bitte wählen Sie ein Passwort";
-                    } else {
-                        $passwd = sanitize_input($_POST["password"]);
-                    }
-                }
-
-                if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="" and $user[$username] === $passwd) {
-                    $_SESSION["user"] = $username;
-                }
-            ?>
-
             <?php if (!isset($_SESSION["user"])): ?> 
+                <h2 class="center mb-3">Login</h2>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -88,27 +100,22 @@
                                 <div class="col mb-3">
                                     <button class="btn btn-outline-danger" type="reset">Reset</button>
                                     <button class="btn btn-outline-primary" type="submit">Login</button>
-                                    <h3>
-                                        <?php
-                                            if($_SERVER["REQUEST_METHOD"] == "POST"){
-                                                echo "kein Erfolg";
-                                            }
-                                        ?>
-                                    </h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             <?php else: ?>  
-                <h3>
-                    Hello <?php 
-                    echo $_SESSION["user"]; 
-                    ?>
-                    <form action="logout.php" method="POST">
-                        <input type="submit" value="Logout" />
-                    </form>
-                </h3>
+                <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col center mt-5">
+                                    <h3>
+                                        Hello <?php echo $_SESSION["user"]; ?> <br><br>
+                                        <a class="btn btn-outline-primary" href="?logout=true">Logout</a>
+                                    </h3>
+                            </div>
+                        </div>
+                </div>
             <?php endif ?> 
         </main>
         <footer>

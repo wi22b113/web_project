@@ -31,9 +31,20 @@
                 <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Login') {echo 'active';} ?>" aria-current="page" href="./login.php">Login</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($currentPage === 'Registrierung') {echo 'active';} ?>" aria-current="page" href="./register.php">Registrierung</a>
-                </li>
+                <?php if (!isset($_SESSION["user"])){
+                    echo "<li class=\"nav-item\">";
+                        echo "<a class=\"nav-link "; 
+                        if ($currentPage === 'Registrierung') {echo 'active';} 
+                        echo "\" aria-current=\"page\" href=\"./register.php\">Registrierung</a>";
+                    echo "</li> ";
+                }else{
+                    echo "<li class=\"nav-item\">";
+                        echo "<a class=\"nav-link "; 
+                        if ($currentPage === 'Stammdaten') {echo 'active';} 
+                        echo "\" aria-current=\"page\" href=\"./master_data.php\">Stammdaten</a>";
+                    echo "</li> ";
+                } 
+                ?> 
             </ul>
         </div>
     </div>

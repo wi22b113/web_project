@@ -66,4 +66,5 @@ class Booking {
   function get_bringsDog() {
     return $this->bringsDog;
   }
+
 }

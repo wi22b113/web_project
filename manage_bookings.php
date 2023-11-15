@@ -43,7 +43,8 @@
             $booking->set_bringsDog(true);
         }
 
-        $_SESSION["booking"] = $booking;
+        $_SESSION['bookings'][] = $booking;
+
     }
 ?> 
 
@@ -135,27 +136,11 @@
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
                                 <?php
-                                    $bookingCounter = $bookingCounter++;
-                                    if(isset($_SESSION["booking"])){
+                                    // Printing out the variables in $_SESSION["bookings"]
+                                    if(isset($_SESSION["bookings"])) {
                                         echo "<h3>Meine Buchungen:</h3>";
-                                        echo "Buchungsnummer: ";
-                                        echo $_SESSION["booking"]->get_number(); echo "<br>";
-                                        echo "Zimmer: ";
-                                        echo $_SESSION["booking"]->get_room(); echo "<br>";
-                                        echo "Ankunftsdatum: ";
-                                        echo $_SESSION["booking"]->get_arrivalDate(); echo "<br>";
-                                        echo "Abreisedatum: ";
-                                        echo $_SESSION["booking"]->get_departureDate(); echo "<br>";
-                                        echo "Status: ";
-                                        echo $_SESSION["booking"]->get_State(); echo "<br>";
-                                        echo "Frühstück: ";
-                                        echo $_SESSION["booking"]->get_includesBreakfast(); echo "<br>";
-                                        echo "Parkplatz: ";
-                                        echo $_SESSION["booking"]->get_includesParking(); echo "<br>";
-                                        echo "Bringt Hund mit: ";
-                                        echo $_SESSION["booking"]->get_bringsDog(); echo "<br>";
+                                        print_r($_SESSION["bookings"]);
                                     }
-
                                 ?>
                             </div>
                         </div>

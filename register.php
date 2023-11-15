@@ -61,6 +61,7 @@
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $passwd1;
             $_SESSION["bookingNumber"] = 0;
+            $_SESSION["bookings"] = array();
             header("Location: login.php"); /* Redirect browser */
         }
     }

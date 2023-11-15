@@ -31,6 +31,7 @@
         $_SESSION["email"] = "admin@email.com";
         $_SESSION["password"] = $passwd;
         $_SESSION["bookingNumber"] = 0;
+        $_SESSION["bookings"] = array();
     }
     
 ?>

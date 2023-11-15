@@ -33,15 +33,24 @@
                 </li>
                 <?php if (!isset($_SESSION["user"])){
                     echo "<li class=\"nav-item\">";
-                        echo "<a class=\"nav-link "; 
-                        if ($currentPage === 'Registrierung') {echo 'active';} 
-                        echo "\" aria-current=\"page\" href=\"./register.php\">Registrierung</a>";
+                    echo "<a class=\"nav-link "; 
+                    if ($currentPage === 'Registrierung') {echo 'active';} 
+                    echo "\" aria-current=\"page\" href=\"./register.php\">Registrierung</a>";
                     echo "</li> ";
                 }else{
                     echo "<li class=\"nav-item\">";
-                        echo "<a class=\"nav-link "; 
-                        if ($currentPage === 'Stammdaten') {echo 'active';} 
-                        echo "\" aria-current=\"page\" href=\"./master_data.php\">Stammdaten</a>";
+                    echo "<a class=\"nav-link "; 
+                    if ($currentPage === 'Stammdaten') {echo 'active';} 
+                    echo "\" aria-current=\"page\" href=\"./master_data.php\">Stammdaten</a>";
+                    echo "</li> ";
+                    echo "<li class=\"nav-item\">";
+                    echo "<a class=\"nav-link "; 
+                    if ($currentPage === 'Buchungen') {echo 'active';} 
+                    echo "\" aria-current=\"page\" href=\"./manage_bookings.php\">Buchungen</a>";
+                    echo "</li> ";
+                    echo "<li class=\"nav-item\">";
+                    echo "<a class=\"nav-link\""; 
+                    echo "aria-current=\"page\" href=\"?logout=true\">Logout</a>";
                     echo "</li> ";
                 } 
                 ?> 

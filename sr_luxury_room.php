@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    include "common_functions.php";
+?>
+
 <!DOCTYPE html>
 <html lang="de">
     <head>

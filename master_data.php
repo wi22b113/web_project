@@ -1,6 +1,6 @@
 <?php
-    include "common_functions.php";
     session_start();
+    include "common_functions.php";
 
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = $oldPasswdErr = "";
@@ -92,6 +92,8 @@
             $oldPasswdErr = "Falsches Passwort!";
         }
     }
+
+
 
 ?> 
 
@@ -205,14 +207,14 @@
 
                             <?php if ($passwordcheck): ?> 
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control <?php if($passwd1Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password1" name="password1" placeholder="a" value="<?php echo $_SESSION["password"];?>" required>
+                                    <input type="password" class="form-control <?php if($passwd1Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password1" name="password1" placeholder="a" required>
                                     <div class="invalid-feedback">
                                         <?php if($passwd1Err!=""){echo $passwd1Err;} ?> 
                                     </div>
                                     <label for="password1">Neues Passwort</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control <?php if($passwd2Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password2" name="password2" placeholder="a" value="<?php echo $_SESSION["password"];?>" required>
+                                    <input type="password" class="form-control <?php if($passwd2Err!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="password2" name="password2" placeholder="a" required>
                                     <div class="invalid-feedback">
                                         <?php if($passwd2Err!=""){echo $passwd2Err;} ?> 
                                     </div>

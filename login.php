@@ -1,6 +1,7 @@
 <?php
-    include "common_functions.php";
     session_start();
+    include "common_functions.php";
+    include "booking.php";
     $user = [];
     $user["admin"] = "admin";
 
@@ -29,15 +30,6 @@
         $_SESSION["lastname"] = "adminNachname";
         $_SESSION["email"] = "admin@email.com";
         $_SESSION["password"] = $passwd;
-    }
-
-    if($_SERVER["REQUEST_METHOD"] == "GET"){
-        if(sanitize_input($_GET["logout"])==true){
-            session_unset();
-            session_destroy();
-            header("Location: login.php"); /* Redirect browser */
-            exit;
-        }
     }
     
 ?>
@@ -110,8 +102,7 @@
                         <div class="row justify-content-center">
                             <div class="col center mt-5">
                                     <h3>
-                                        Hello <?php echo $_SESSION["user"]; ?> <br><br>
-                                        <a class="btn btn-outline-primary" href="?logout=true">Logout</a>
+                                        Hello <?php echo $_SESSION["user"]; ?>
                                     </h3>
                             </div>
                         </div>

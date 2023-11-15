@@ -1,6 +1,6 @@
 <?php
-    include "common_functions.php";
     session_start();
+    include "common_functions.php";
 
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";

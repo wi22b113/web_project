@@ -30,6 +30,7 @@
         $_SESSION["lastname"] = "adminNachname";
         $_SESSION["email"] = "admin@email.com";
         $_SESSION["password"] = $passwd;
+        $_SESSION["bookingNumber"] = 0;
     }
     
 ?>

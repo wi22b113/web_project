@@ -1,17 +1,13 @@
 <?php
-    include "booking.php";
     session_start();
+    include "booking.php";
     include "common_functions.php";
-
-    $bookingCounter = 0;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $booking = new booking();
 
-
-        $booking->set_number(++$bookingCounter);
-        
+        $booking->set_number(++$_SESSION["bookingNumber"]);
 
         if (!empty($_POST["room"])) {
             $booking->set_Room(sanitize_input($_POST["room"]));
@@ -48,8 +44,6 @@
         }
 
         $_SESSION["booking"] = $booking;
-
-
     }
 ?> 
 
@@ -141,10 +135,10 @@
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
                                 <?php
+                                    $bookingCounter = $bookingCounter++;
                                     if(isset($_SESSION["booking"])){
                                         echo "<h3>Meine Buchungen:</h3>";
                                         echo "Buchungsnummer: ";
-                                        echo $bookingCounter;
                                         echo $_SESSION["booking"]->get_number(); echo "<br>";
                                         echo "Zimmer: ";
                                         echo $_SESSION["booking"]->get_room(); echo "<br>";

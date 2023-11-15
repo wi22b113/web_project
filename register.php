@@ -60,6 +60,7 @@
             $_SESSION["lastname"] = $lname;
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $passwd1;
+            $_SESSION["bookingNumber"] = 0;
             header("Location: login.php"); /* Redirect browser */
         }
     }

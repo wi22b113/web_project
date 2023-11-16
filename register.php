@@ -31,12 +31,13 @@
                 $emailErr = "Ungültiges Email Format";
             }
         }
-        
+
         if (empty($_POST["username"])) {
             $usernameErr = "Bitte wählen Sie einen Usernamen";
-        } else {
+        }else {
             $username = sanitize_input($_POST["username"]);
         }
+
 
         if (empty($_POST["password1"])) {
             $passwd1Err = "Bitte wählen Sie ein Passwort";
@@ -61,7 +62,6 @@
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $passwd1;
             $_SESSION["bookingNumber"] = 0;
-            $_SESSION["bookings"] = array();
             header("Location: login.php"); /* Redirect browser */
         }
     }

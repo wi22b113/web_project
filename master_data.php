@@ -6,7 +6,7 @@
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = $oldPasswdErr = "";
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = $oldPasswd ="";
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["oldPasswd"])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userdata") {
 
         $gender = $_POST["gender"];
         
@@ -49,7 +49,7 @@
         }
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userPasswd" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
 
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
@@ -81,8 +81,8 @@
             header("Location: master_data.php"); /* Redirect browser */
         }
 
-    }elseif($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["oldPasswd"])){
-
+    }elseif($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userPasswd"){
+        
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
         if($oldPasswd === $_SESSION["password"]){
@@ -92,6 +92,7 @@
             $oldPasswdErr = "Falsches Passwort!";
         }
     }
+
 
 
 
@@ -175,6 +176,11 @@
                                 </div>
                                 <label for="username">Username</label>
                             </div>
+
+                            <div>
+                                <input type="hidden" id="action" name="action" value="update-userdata">
+                            </div>
+
                             <div class="col mb-3">
                                 <button class="btn btn-outline-primary" type="submit">Aktualisieren</button>
                                 <br><br>
@@ -200,6 +206,11 @@
                                 </div>
                                 <label for="oldPasswd">Altes Passwort</label>
                             </div>
+
+                            <div>
+                                <input type="hidden" id="action" name="action" value="update-userPasswd">
+                            </div>
+                            
                             <div class="col mb-3">
                                 <button class="btn btn-outline-primary" type="submit">Prüfen</button>
                                 <br><br>

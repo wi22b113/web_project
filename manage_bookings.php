@@ -43,7 +43,11 @@
             $booking->set_bringsDog(true);
         }
 
-        $_SESSION['bookings'][] = $booking;
+        if(isset($_SESSION["bookings"])){
+            $_SESSION['bookings'][] = $booking;
+        }else{
+            $_SESSION["bookings"] = array($booking);
+        }
 
     }
 ?> 
@@ -138,8 +142,8 @@
                                 <?php
                                     // Printing out the variables in $_SESSION["bookings"]
                                     if(isset($_SESSION["bookings"])) {
-                                        echo "<h3>Meine Buchungen:</h3>";
-                                        print_r($_SESSION["bookings"]);
+                                        echo "<h3>Meine Buchungen</h3>";
+                                        var_dump($_SESSION["bookings"]);
                                     }
                                 ?>
                             </div>

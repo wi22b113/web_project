@@ -1,7 +1,6 @@
 <?php
     session_start();
     include "common_functions.php";
-    include "booking.php";
     $user = [];
     $user["admin"] = "admin";
 
@@ -31,7 +30,6 @@
         $_SESSION["email"] = "admin@email.com";
         $_SESSION["password"] = $passwd;
         $_SESSION["bookingNumber"] = 0;
-        $_SESSION["bookings"] = array();
     }
     
 ?>
@@ -91,7 +89,10 @@
                                     </div>
                                     <label for="password">Passwort</label>
                                 </div>
-                                <div class="col mb-3">
+
+                                Noch kein Konto? <a href="./register.php">Hier</a> registrieren!
+
+                                <div class="col mb-3 mt-3">
                                     <button class="btn btn-outline-danger" type="reset">Reset</button>
                                     <button class="btn btn-outline-primary" type="submit">Login</button>
                                 </div>
@@ -105,7 +106,14 @@
                             <div class="col center mt-5">
                                     <h3>
                                         Hello <?php echo $_SESSION["user"]; ?>
+                                        <br>
+                                        <br>
                                     </h3>
+                                    <p>
+                                        Möchtest du ein Zimmer buchen?
+                                        Oder möchtest du deine bereits getätigten Buchungen ansehen?
+                                        Dann klicke <a class="btn btn-primary" href="./manage_bookings.php" role="button">Hier!</a>
+                                    </p>
                             </div>
                         </div>
                 </div>

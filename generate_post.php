@@ -1,7 +1,8 @@
 <?php
     include "objects.php";
     session_start();
-    include "common_functions.php";    
+    include "common_functions.php";  
+    
 ?> 
 
 
@@ -29,7 +30,7 @@
     <!--Link stylesheet-->
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-<!--enctype="multipart/form-data"-->
+
 <body>
     <header>
         <?php
@@ -42,7 +43,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form action="posts.php" method="post" >
+                    <form action="posts.php" method="post" enctype="multipart/form-data">
                         <div class="form-floating mb-3">
                                 <input type="text" class="form-control <?php if($_SESSION["titleErr"]!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="title" name="title" placeholder="a" value="<?php echo $title;?>"/>
                                 <div class="invalid-feedback">

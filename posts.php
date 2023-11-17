@@ -3,17 +3,12 @@
     session_start();
     include "common_functions.php";
 
-    $posts = [];
-    //$post["text1"] = "hallo ich bin Text 1";
-    //$post["bild1"] = "./img/Hotel-1.jpeg";
-    //$post["text2"] = "hallo ich bin Text 2";
-    //$post["bild2"] = "./img/Hotel-2.jpeg";
-
+    $posts = array();
 
     // define variables and set to empty values
     $text = $title = $picture = "";
     
-    $target_dir = "./uploads";
+    $targetDir = "./uploads/";
     $uploadOk = 1;
 
     if(!file_exists($targetDir)){
@@ -32,52 +27,45 @@
             $_SESSION["titleErr"]= "Bitte geben Sie einen Titel ein";
         }
 
-        $datum = date("d.m.Y - H:i", sanitize_input($_POST["date"]));
+        $datum = new DateTime();
+        $datum->setTimestamp(sanitize_input($_POST["date"]));
+
         $author = sanitize_input($_POST["author"]);
 
 
-
-
-        //$target_file = $target_dir . basename($_FILES["file"]["name"]);
-        //$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        $target_file = $targetDir . basename($_FILES["file"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 
         if(isset($_FILES)){
-            var_dump($_FILES);
-            //$uploadedFileName = $target_dir . htmlspecialchars(basename(($_FILES["file"]["name"])));
+            $uploadedFileName = $targetDir . htmlspecialchars(basename(($_FILES["file"]["name"])));
         }
 
-                /*
-
         // Check if image file is a actual image or fake image
-
         $check = getimagesize($_FILES["file"]["tmp_name"]);
         if($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
             $uploadOk = 1;
         } else {
-            echo "File is not an image.";
+            $_SESSION["formatErr"] = "File is not an image.";
             $uploadOk = 0;
         }
         
-
         // Check if file already exists
         if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
+            $_SESSION["formatErr"] =  "Sorry, file already exists.";
+            $uploadOk = 0;
         }
 
         // Check file size
-        if ($_FILES["file"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
+        if ($_FILES["file"]["size"] > 1000000) {
+            $_SESSION["formatErr"] = "Sorry, your file is too large.";
+            $uploadOk = 0;
         }
 
         // Allow certain file formats
-        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif" ) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        $uploadOk = 0;
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+            $_SESSION["formatErr"] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
         }
 
         // Check if $uploadOk is set to 0 by an error
@@ -85,28 +73,25 @@
             $_SESSION["formatErr"] = "Sorry, your file was not uploaded.";
         // if everything is ok, try to upload file
         } else {
-        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-            echo "The file ". htmlspecialchars( basename( $_FILES["file"]["name"])). " has been uploaded.";
-        } else {
-            echo "Sorry, there was an error uploading your file.";
-        }
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            } else {
+                $_SESSION["formatErr"] = "Sorry, there was an error uploading your file.";
+            }
         }
 
-        */
-
+        
         if($titleErr=="" && $textErr=="" && $formatErr==""){
-            //$post = new post();
-            //$post->set_title($title);
-            //$post->set_text($text);
-            //$post->set_picture($target_file);
-            //$post->set_author($author);
-            //$post->set_date($date);
+            $post = new post();
+            $post->set_title($title);
+            $post->set_text($text);
+            $post->set_picture($target_file);
+            $post->set_author($author);
+            $post->set_date($datum);
         }
 
         if($titleErr=="" && $textErr=="" && $formatErr==""){
-            //$post[] = $post;
+            $posts[] = $post;
         }
-
     }
 
 ?>
@@ -145,6 +130,18 @@
         <h1>Posts</h1>
     </header>
     <main>
+
+    <?php
+        // Printing out the variables in $_SESSION["bookings"]
+
+        if(count($posts)>0) {
+            $count = count($posts);
+            for($i=0; $i<$count; $i++) {
+                echo $posts[$i];
+            }
+        }
+
+    ?>
         
     </main>
 

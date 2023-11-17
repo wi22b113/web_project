@@ -121,5 +121,17 @@ class Post {
     return $this->date;
   }
 
+  function __toString()
+  {
+    return 
+    "Titel: " . $this->get_title() . "<br>" .
+    "Text: " . $this->get_text() . "<br>" .
+    "Bild: " . $this->get_picture() . "<br>" .
+    "Author: " . $this->get_author() . "<br>" .
+    "Datum: " . $this->get_date()->format("d.m.Y H:i") . "<br>";
+
+
+  }
+
   
 }

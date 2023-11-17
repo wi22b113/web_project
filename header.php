@@ -28,14 +28,24 @@
                 <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Hilfe') {echo 'active';} ?>" aria-current="page" href="./hilfe.php">Hilfe</a>
                 </li>
+<!--
                 <li class="nav-item">
-                    <a class="nav-link <?php if ($currentPage === 'Login') {echo 'active';} ?>" aria-current="page" href="./login.php">Login</a>
+                    <a class="nav-link 
+                    <?php //if ($currentPage === 'Login') {echo 'active';} ?>
+                    " aria-current="page" href="./login.php">Login</a>
                 </li>
+-->
                 <?php if (!isset($_SESSION["user"])){
                     echo "<li class=\"nav-item\">";
                     echo "<a class=\"nav-link "; 
                     if ($currentPage === 'Registrierung') {echo 'active';} 
                     echo "\" aria-current=\"page\" href=\"./register.php\">Registrierung</a>";
+                    echo "</li> ";
+
+                    echo "<li class=\"nav-item\">";
+                    echo "<a class=\"nav-link "; 
+                    if ($currentPage === 'Login') {echo 'active';} 
+                    echo "\" aria-current=\"page\" href=\"./login.php\">Login</a>";
                     echo "</li> ";
                 }else{
                     echo "<li class=\"nav-item\">";

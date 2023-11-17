@@ -129,7 +129,23 @@
             ?>
         </header>
         <main>
-           
+        <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col center mt-5">
+                            <h3>
+                                Hello <?php echo $_SESSION["user"]; ?>
+                                <br>
+                                <br>
+                            </h3>
+                            <p>
+                                Möchtest du ein Zimmer buchen?
+                                Oder möchtest du deine bereits getätigten Buchungen ansehen?
+                                Dann klicke <a class="btn btn-primary" href="./manage_bookings.php" role="button">Hier!</a>
+                            </p>
+                    </div>
+                </div>
+            </div> 
+
             <h2 class="center mb-3">Stammdaten</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">

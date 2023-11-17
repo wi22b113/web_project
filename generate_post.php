@@ -1,4 +1,5 @@
 <?php
+    include "objects.php";
     session_start();
     include "common_functions.php";    
 ?> 
@@ -28,7 +29,7 @@
     <!--Link stylesheet-->
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-
+<!--enctype="multipart/form-data"-->
 <body>
     <header>
         <?php
@@ -41,38 +42,42 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form action="posts.php" method="post" enctype="multipart/form-data">
+                    <form action="posts.php" method="post" >
                         <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if($titleErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="title" name="title" placeholder="a" value="<?php echo $title;?>"/>
+                                <input type="text" class="form-control <?php if($_SESSION["titleErr"]!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="title" name="title" placeholder="a" value="<?php echo $title;?>"/>
                                 <div class="invalid-feedback">
-                                    <?php if($titleErr!=""){echo $titleErr;} ?> 
+                                    <?php if($_SESSION["titleErr"]!=""){echo $_SESSION["titleErr"];} ?> 
                                 </div>
                                 <label for="title">Titel</label>
                         </div>
                         
                         <div class="form-floating mb-3">
-                            <textarea class="form-control <?php if($textErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="text" name="text" rows="5" style="height: 100px" placeholder="a" value="<?php echo $text;?>"></textarea>
+                            <textarea class="form-control <?php if($_SESSION["textErr"]!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="text" name="text" rows="5" style="height: 100px" placeholder="a" value="<?php echo $text;?>"></textarea>
                                 <div class="invalid-feedback">
-                                    <?php if($textErr!=""){echo $textErr;} ?> 
+                                    <?php if($_SESSION["textErr"]!=""){echo $_SESSION["textErr"];} ?> 
                                 </div>
                             <label for="text">Inhalt</label>        
                         </div>
                         
                         <div class="mb-3">
                             <label for="file" class="form-label">Bild Upload</label>  
-                            <input class="form-control <?php if($formatErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>"  type="file" id="file" name="file" value="<?php echo $picture;?>"/>
+                            <input class="form-control <?php if($_SESSION["formatErr"]!=""){echo "is-invalid";}else{echo "border-primary";} ?>"  type="file" id="file" name="file" value="<?php echo $picture;?>"/>
                                 <div class="invalid-feedback">
-                                    <?php if($formatErr!=""){echo $formatErr;} ?> 
+                                    <?php if($_SESSION["formatErr"]!=""){echo $_SESSION["formatErr"];} ?> 
                                 </div>
                         </div>
 
+
                         <div>
-                                <input type="hidden" id="date" name="date" value="<?php time();?>">
+                            <input type="hidden" id="date" name="date" value="<?php echo time();?>">
                         </div>
+
                         <div>
-                                <input type="hidden" id="author" name="author" value="<?php $_SESSION["user"];?>">
+                                <input type="hidden" id="author" name="author" value="<?php echo $_SESSION["user"];?>">
                         </div>
                         <button type="submit" class="btn btn-primary">Post erstellen</button>
+
+
                     </form>
                 </div>
             </div>

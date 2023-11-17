@@ -41,7 +41,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form action="posts.php" method="post">
+                    <form action="posts.php" method="post" enctype="multipart/form-data">
                         <div class="form-floating mb-3">
                                 <input type="text" class="form-control <?php if($titleErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="title" name="title" placeholder="a" value="<?php echo $title;?>"/>
                                 <div class="invalid-feedback">
@@ -65,6 +65,7 @@
                                     <?php if($formatErr!=""){echo $formatErr;} ?> 
                                 </div>
                         </div>
+
                         <div>
                                 <input type="hidden" id="date" name="date" value="<?php time();?>">
                         </div>

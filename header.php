@@ -23,6 +23,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link <?php if ($currentPage === 'Posts') {echo 'active';} ?>" aria-current="page" href="./posts.php">Posts</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Impressum') {echo 'active';} ?>" aria-current="page" href="./impressum.php">Impressum</a>
                 </li>
                 <li class="nav-item">

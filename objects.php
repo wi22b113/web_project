@@ -81,3 +81,38 @@ class Booking {
   }
 
 }
+class Post {
+  // Properties
+  private $text;
+  private $picture;
+  private $author;
+  private $date;
+  
+  // Methods
+  function set_text($text) {
+    $this->text = $text;
+  }
+  function get_text() {
+    return $this->text;
+  }
+  function set_picture($picture) {
+    $this->picture = $picture;
+  }
+  function get_picture() {
+    return $this->picture;
+  }
+  function set_author($author) {
+    $this->author = $author;
+  }
+  function get_author() {
+    return $this->author;
+  }
+  function set_date($date) {
+    $this->date = $date;
+  }
+  function get_date() {
+    return $this->date;
+  }
+
+  
+}

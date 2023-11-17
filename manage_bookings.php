@@ -1,5 +1,5 @@
 <?php
-    include "booking.php";
+    include "objects.php";
     session_start();
     include "common_functions.php";
 

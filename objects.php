@@ -83,12 +83,19 @@ class Booking {
 }
 class Post {
   // Properties
+  private $title;
   private $text;
   private $picture;
   private $author;
   private $date;
   
   // Methods
+  function set_title($title) {
+    $this->title = $title;
+  }
+  function get_title() {
+    return $this->title;
+  }
   function set_text($text) {
     $this->text = $text;
   }

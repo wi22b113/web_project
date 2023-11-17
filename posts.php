@@ -9,6 +9,38 @@
     $post["bild2"] = "./img/Hotel-2.jpeg";
 
 
+    // define variables and set to empty values
+    $titleErr = $textErr = $formatErr = "";
+    $text = $title = $picture = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        $text = sanitize_input($_POST["text"]);
+        if (empty($text)) {
+            $textErr = "Bitte geben Sie einen Text ein";
+        }
+
+        $title = sanitize_input($_POST["title"]);
+        if (empty($title)) {
+            $titleErr = "Bitte geben Sie einen Titel ein";
+        }
+
+        $datum = date("d.m.Y - H:i", sanitize_input($_POST["date"]));
+        $author = sanitize_input($_POST["author"]);
+
+
+        if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr=="" and $passwd1Err=="" and $passwd2Err==""){
+            $_SESSION["user"] = $username;
+            $_SESSION["gender"] = $gender;
+            $_SESSION["firstname"] = $fname;
+            $_SESSION["lastname"] = $lname;
+            $_SESSION["email"] = $email;
+            $_SESSION["password"] = $passwd1;
+            $_SESSION["bookingNumber"] = 0;
+            header("Location: login.php"); /* Redirect browser */
+        }
+}
+
 ?>
 
 <!DOCTYPE html>

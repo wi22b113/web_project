@@ -6,9 +6,9 @@
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = $oldPasswdErr = "";
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = $oldPasswd ="";
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userdata") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata") {
 
-        $gender = $_POST["gender"];
+        $gender = sanitize_input($_POST["gender"]);
         
         $fname= sanitize_input($_POST["vorname"]);
         // check if firstname only contains letters and whitespace
@@ -49,7 +49,7 @@
         }
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userPasswd" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
 
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
@@ -81,7 +81,7 @@
             header("Location: master_data.php"); /* Redirect browser */
         }
 
-    }elseif($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["action"] === "update-userPasswd"){
+    }elseif($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd"){
         
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
@@ -92,10 +92,6 @@
             $oldPasswdErr = "Falsches Passwort!";
         }
     }
-
-
-
-
 ?> 
 
 <!DOCTYPE html>

@@ -3,49 +3,70 @@
     include "booking.php";
     include "common_functions.php";
 
+
+    $roomErr = $arrivalDateErr = $departureDateErr = "";
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $booking = new booking();
 
         $booking->set_number(++$_SESSION["bookingNumber"]);
 
-        if (!empty($_POST["room"])) {
-            $booking->set_Room(sanitize_input($_POST["room"]));
+        if (empty($_POST["room"])) {
+            $roomErr = "Wählen Sie eine Zimmer Kategorie aus!";
+        }else{
+            $room = sanitize_input($_POST["room"]);
+            $booking->set_Room($room);
         }
 
-        if (!empty($_POST["arrivalDate"])) {
-            $booking->set_arrivalDate(sanitize_input($_POST["arrivalDate"]));
+        if (empty($_POST["arrivalDate"])) {
+            $arrivalDateErr = "Wählen Sie ein Anreisedatum aus!";
+        }else{
+            $arrivalDate = sanitize_input($_POST["arrivalDate"]);
+            $booking->set_arrivalDate(date_create($arrivalDate));
         }
 
-        if (!empty($_POST["departureDate"])) {
-            $booking->set_departureDate(sanitize_input($_POST["departureDate"]));
+        if (empty($_POST["departureDate"])) {
+            $departureDateErr = "Wählen Sie ein Abreisedatum aus!";
+        }else{
+            $departureDate = sanitize_input($_POST["departureDate"]);
+            $booking->set_departureDate(date_create($departureDate));
         }
-
+        
+        if(!empty($_POST["arrivalDate"]) && !empty($_POST["departureDate"])){
+            if($booking->get_arrivalDate()>$booking->get_departureDate() || $booking->get_arrivalDate()==$booking->get_departureDate()){
+                $departureDateErr = "Abreisedatum kann nicht <= Anreisedatum sein!";
+            }
+        }
+    
         if (!empty($_POST["state"])) {
             $booking->set_State(sanitize_input($_POST["state"]));
         }
 
-        if (empty($_POST["includesBreakfast"]) || sanitize_input($_POST["includesBreakfast"]) != "on") {
+        $breakfast = sanitize_input($_POST["includesBreakfast"]);
+        if (empty($_POST["includesBreakfast"]) || $breakfast != "on") {
             $booking->set_includesBreakfast(false);
         }else{
             $booking->set_includesBreakfast(true);
         }
 
-        if (empty($_POST["includesParking"]) || sanitize_input($_POST["includesParking"]) != "on") {
+        $parking = sanitize_input($_POST["includesParking"]);
+        if (empty($_POST["includesParking"]) || $parking != "on") {
             $booking->set_includesParking(false);
         }else{
             $booking->set_includesParking(true);
         }
 
-        if (empty($_POST["bringsDog"]) || sanitize_input($_POST["bringsDog"]) != "on") {
+        $bringsDog = sanitize_input($_POST["bringsDog"]);
+        if (empty($_POST["bringsDog"]) || $bringsDog != "on") {
             $booking->set_bringsDog(false);
         }else{
             $booking->set_bringsDog(true);
         }
 
-        if(isset($_SESSION["bookings"])){
+        if(isset($_SESSION["bookings"]) && $roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
             $_SESSION['bookings'][] = $booking;
-        }else{
+        }elseif($roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
             $_SESSION["bookings"] = array($booking);
         }
 
@@ -88,21 +109,23 @@
         </header>
         <main>
             <h2 class="center mb-3">Buchungen</h2>
-            <h4 class="center mb-3">Kein Error-Handling umgesetzt</h4>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div>
                                 <label for="room"></label>
-                                <select class="form-select border-primary mb-3" id="room" name="room" aria-label="room" required>
-                                    <option value "" disabled selected>Room Category</option>
-                                    <option>Master Suite</option>
-                                    <option>Junior Suite</option>
-                                    <option>Superior Room</option>
-                                    <option>Luxury Room</option>
-                                    <option>Luxury Extended Room</option>
+                                <select class="mb-3 form-select <?php if($roomErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="room" name="room" aria-label="room" required>
+                                    <option value "" disabled selected>Zimmer Kategorie</option>
+                                    <option <?php if (isset($room) && $room=="Master Suite") echo "selected";?> >Master Suite</option>
+                                    <option <?php if (isset($room) && $room=="Junior Suite") echo "selected";?> >Junior Suite</option>
+                                    <option <?php if (isset($room) && $room=="Superior Room") echo "selected";?> >Superior Room</option>
+                                    <option <?php if (isset($room) && $room=="Luxury Room") echo "selected";?> >Luxury Room</option>
+                                    <option <?php if (isset($room) && $room=="Luxury Extended Room") echo "selected";?> >Luxury Extended Room</option>
                                 </select>
+                                <div class="invalid-feedback">
+                                    <?php if($roomErr!=""){echo $roomErr;} ?> 
+                                </div>
                             </div>
 
                             <div>
@@ -110,28 +133,34 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control border-primary" id="arrivalDate" name="arrivalDate" placeholder="a" required>
+                                <input type="date" class="form-control <?php if($arrivalDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="arrivalDate" name="arrivalDate" placeholder="a" value="<?php echo $arrivalDate?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($arrivalDateErr!=""){echo $arrivalDateErr;} ?> 
+                                </div>
                                 <label for="arrivalDate">Anreisedatum</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control border-primary" id="departureDate" name="departureDate" placeholder="a" required>
+                                <input type="date" class="form-control <?php if($departureDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="departureDate" name="departureDate" placeholder="a" value="<?php echo $departureDate?>" required>
+                                <div class="invalid-feedback">
+                                    <?php if($departureDateErr!=""){echo $departureDateErr;} ?> 
+                                </div>
                                 <label for="departureDate">Abreisedatum</label>
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a">
+                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a" <?php if ($breakfast=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesBreakfast">Frühstück erwünscht?</label>
                             </div>
 
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a">
+                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a" <?php if ($parking=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesParking">Parkplatz erwünscht?</label>
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a">
+                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a" <?php if ($bringsDog=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="bringsDog">Ich nehme meinen Hund mit!</label>
                             </div>
 

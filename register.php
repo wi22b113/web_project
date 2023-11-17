@@ -8,7 +8,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $gender = $_POST["gender"];
+        $gender = sanitize_input($_POST["gender"]);
         
         $fname= sanitize_input($_POST["vorname"]);
         // check if firstname only contains letters and whitespace

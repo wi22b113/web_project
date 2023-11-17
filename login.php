@@ -1,6 +1,7 @@
 <?php
     session_start();
     include "common_functions.php";
+
     $user = [];
     $user["admin"] = "admin";
 

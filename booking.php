@@ -67,4 +67,17 @@ class Booking {
     return $this->bringsDog;
   }
 
+  function __toString()
+  {
+    return 
+    "Buchungsnummer: " . $this->get_number() . "<br>" .
+    "Zimmer Kategorie: " . $this->get_Room() . "<br>" .
+    "Buchungsstatus: " . ($this->get_State()=="new" ? 'Neu' : '') . "<br>" .
+    "Anreisedatum: " . $this->get_arrivalDate()->format("d.m.Y") . "<br>" .
+    "Abfahrtsdatum: " . $this->get_departureDate()->format("d.m.Y") . "<br>" .
+    "Frühstück inkludiert: " . ($this->get_includesBreakfast() ? 'Ja' : 'Nein') . "<br>" .
+    "Parken inkludiert: " . ($this->get_includesParking() ? 'Ja' : 'Nein') . "<br>" .
+    "Bringt Hund mit: " . ($this->get_bringsDog() ? 'Ja' : 'Nein') . "<br><br>";
+  }
+
 }

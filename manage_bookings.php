@@ -1,8 +1,7 @@
 <?php
-    session_start();
     include "booking.php";
+    session_start();
     include "common_functions.php";
-
 
     $roomErr = $arrivalDateErr = $departureDateErr = "";
 
@@ -171,16 +170,21 @@
                                 <?php
                                     // Printing out the variables in $_SESSION["bookings"]
                                     if(isset($_SESSION["bookings"])) {
-                                        echo "<h3>Meine Buchungen</h3>";
-                                        var_dump($_SESSION["bookings"]);
+
+                                        $count = count($_SESSION['bookings']);
+                                        echo "<h3>Meine Buchungen (Summe: " . $count .")</h3><br>";
+
+                                        for($i=0; $i<$count; $i++) {
+                                            echo $_SESSION['bookings'][$i];
+                                        }
                                     }
+
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-
         </main>
         <footer>
             &copy 2023

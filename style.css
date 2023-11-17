@@ -1,0 +1,64 @@
+body {
+  background-color: white;
+  color: black;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 300%;
+}
+
+header h1 {
+  color: black;
+  /*font-family: 'Oswald', sans-serif;*/
+  font-family: 'Playfair Display', serif;
+  font-size: 300%;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 200%;
+}
+
+h3 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 150%;
+}
+
+h4 {
+  color: black;
+  font-family: 'Oswald', sans-serif;
+  font-size: 120%;
+}
+
+p {
+  color: black;
+  font-size: 100%;
+}
+
+.center {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+.directorpictures {
+  width: 200px;
+  height: 300px;
+}
+
+footer {
+  color: black;
+  font-size: 100%;
+  text-align: center;
+  width: 100%;
+  margin-top: 50px;
+}

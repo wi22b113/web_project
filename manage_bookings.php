@@ -7,7 +7,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $booking = new booking();
+        $booking = new Booking();
 
         $booking->set_number(++$_SESSION["bookingNumber"]);
 
@@ -168,7 +168,7 @@
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
                                 <?php
-                                    // Printing out the variables in $_SESSION["bookings"]
+                                    // Printing out the booking objects in $_SESSION["bookings"]
                                     if(isset($_SESSION["bookings"])) {
 
                                         $count = count($_SESSION['bookings']);

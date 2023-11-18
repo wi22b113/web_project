@@ -128,7 +128,7 @@ class Post {
     "Text: " . $this->get_text() . "<br>" .
     "Bild: " . $this->get_picture() . "<br>" .
     "Author: " . $this->get_author() . "<br>" .
-    "Datum: " . $this->get_date()->format("d.m.Y H:i") . "<br>";
+    "Datum: " . $this->get_date()->format("d.m.Y H:i") . "<br><br>";
 
 
   }

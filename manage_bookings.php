@@ -4,12 +4,11 @@
     include "common_functions.php";
 
     $roomErr = $arrivalDateErr = $departureDateErr = "";
+    $errorActive = false;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $booking = new Booking();
-
-        $booking->set_number(++$_SESSION["bookingNumber"]);
 
         if (empty($_POST["room"])) {
             $roomErr = "Wählen Sie eine Zimmer Kategorie aus!";
@@ -64,9 +63,15 @@
         }
 
         if(isset($_SESSION["bookings"]) && $roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
+            $booking->set_number(++$_SESSION["bookingNumber"]);
             $_SESSION['bookings'][] = $booking;
         }elseif($roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
+            $booking->set_number(++$_SESSION["bookingNumber"]);
             $_SESSION["bookings"] = array($booking);
+        }
+
+        if($roomErr != "" || $arrivalDateErr != "" || $departureDateErr != ""){
+            $errorActive = true;
         }
 
     }
@@ -116,11 +121,11 @@
                                 <label for="room"></label>
                                 <select class="mb-3 form-select <?php if($roomErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="room" name="room" aria-label="room" required>
                                     <option value "" disabled selected>Zimmer Kategorie</option>
-                                    <option <?php if (isset($room) && $room=="Master Suite") echo "selected";?> >Master Suite</option>
-                                    <option <?php if (isset($room) && $room=="Junior Suite") echo "selected";?> >Junior Suite</option>
-                                    <option <?php if (isset($room) && $room=="Superior Room") echo "selected";?> >Superior Room</option>
-                                    <option <?php if (isset($room) && $room=="Luxury Room") echo "selected";?> >Luxury Room</option>
-                                    <option <?php if (isset($room) && $room=="Luxury Extended Room") echo "selected";?> >Luxury Extended Room</option>
+                                    <option <?php if ($errorActive && isset($room) && $room=="Master Suite") echo "selected";?> >Master Suite</option>
+                                    <option <?php if ($errorActive && isset($room) && $room=="Junior Suite") echo "selected";?> >Junior Suite</option>
+                                    <option <?php if ($errorActive && isset($room) && $room=="Superior Room") echo "selected";?> >Superior Room</option>
+                                    <option <?php if ($errorActive && isset($room) && $room=="Luxury Room") echo "selected";?> >Luxury Room</option>
+                                    <option <?php if ($errorActive && isset($room) && $room=="Luxury Extended Room") echo "selected";?> >Luxury Extended Room</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     <?php if($roomErr!=""){echo $roomErr;} ?> 
@@ -132,7 +137,7 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control <?php if($arrivalDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="arrivalDate" name="arrivalDate" placeholder="a" value="<?php echo $arrivalDate?>" required>
+                                <input type="date" class="form-control <?php if($arrivalDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="arrivalDate" name="arrivalDate" placeholder="a" <?php if($errorActive){echo "value=\"". $arrivalDate . "\"";}?> required>
                                 <div class="invalid-feedback">
                                     <?php if($arrivalDateErr!=""){echo $arrivalDateErr;} ?> 
                                 </div>
@@ -140,7 +145,7 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control <?php if($departureDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="departureDate" name="departureDate" placeholder="a" value="<?php echo $departureDate?>" required>
+                                <input type="date" class="form-control <?php if($departureDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="departureDate" name="departureDate" placeholder="a" <?php if($errorActive){echo "value=\"". $departureDate . "\"";}?> required>
                                 <div class="invalid-feedback">
                                     <?php if($departureDateErr!=""){echo $departureDateErr;} ?> 
                                 </div>
@@ -148,18 +153,18 @@
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a" <?php if ($breakfast=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a" <?php if ($errorActive && $breakfast=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesBreakfast">Frühstück erwünscht?</label>
                             </div>
 
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a" <?php if ($parking=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a" <?php if ($errorActive && $parking=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesParking">Parkplatz erwünscht?</label>
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a" <?php if ($bringsDog=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a" <?php if ($errorActive && $bringsDog=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="bringsDog">Ich nehme meinen Hund mit!</label>
                             </div>
 

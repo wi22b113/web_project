@@ -127,9 +127,9 @@
         <h1>Posts erstellen</h1>
     </header>
     <main>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data">
                         <div class="form-floating mb-3">
                                 <input type="text" class="form-control <?php if($titleErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="title" name="title" placeholder="a" value="<?php echo $title;?>"/>

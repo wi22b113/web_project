@@ -31,13 +31,6 @@
                 <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Hilfe') {echo 'active';} ?>" aria-current="page" href="./hilfe.php">Hilfe</a>
                 </li>
-<!--
-                <li class="nav-item">
-                    <a class="nav-link 
-                    <?php //if ($currentPage === 'Login') {echo 'active';} ?>
-                    " aria-current="page" href="./login.php">Login</a>
-                </li>
--->
                 <?php if (!isset($_SESSION["user"])){
                     echo "<li class=\"nav-item\">";
                     echo "<a class=\"nav-link "; 
@@ -70,7 +63,6 @@
                     echo "<a class=\"nav-link\""; 
                     echo "aria-current=\"page\" href=\"?logout=true\">Logout</a>";
                     echo "</li> ";
-
                 } 
                 ?> 
             </ul>

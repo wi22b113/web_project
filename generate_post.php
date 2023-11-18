@@ -7,8 +7,7 @@
     // define variables and set to empty values
     $textErr = $titleErr = $pictureErr = "";
     $text = $title = $file_name = "";
-    $thumbnail_width = 150;
-    $thumbnail_height = 150;
+    $percent = 0.5;
     
     $targetDir = "./uploads/";
     $resizedDir = "./resized/";
@@ -61,24 +60,39 @@
             }
 
             // Allow only certain file formats
-            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-                $pictureErr = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $pictureErr = "Sorry, only JPG, JPEG & PNG files are allowed.";
             }
 
             // Check if upload was Ok and move the file
             if ($pictureErr=="") {
                 if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {    
+
+                    
                     // Laden Sie das Originalbild 
-                    $source_image = imagecreatefrompng($target_file);
+                    if($imageFileType == "jpg" || $imageFileType == "jpeg"){
+                        $source_image = imagecreatefromjpeg($target_file);
+                    }else{
+                        $source_image = imagecreatefrompng($target_file);
+                    }
+                    
                     $source_width = imagesx($source_image);
+                    $thumbnail_width = $source_width*$percent;
                     $source_height = imagesy($source_image);
+                    $thumbnail_height = $source_height*$percent;
                     // Erstellen Sie das Thumbnail
                     $thumbnail = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 
                     // Skalieren Sie das Originalbild auf die Größe des Thumbnails
                     imagecopyresized($thumbnail, $source_image, 0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $source_width, $source_height);
+                    
+                    
                     // Speichern Sie das Thumbnail
-                    imagepng($thumbnail, $resized_file);
+                    if($imageFileType == "jpg" || $imageFileType == "jpeg"){
+                        imagejpeg($thumbnail, $resized_file);
+                    }else{
+                        imagepng($thumbnail, $resized_file);
+                    }
                     
                     // Freigeben von Speicher
                     //imagedestroy($source_image);

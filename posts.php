@@ -1,7 +1,7 @@
 <?php
     include "objects.php";
     session_start();
-    include "common_functions.php";
+    include "common_functions.php";   
 
 ?>
 
@@ -39,8 +39,29 @@
         <h1>Posts</h1>
     </header>
     <main>
+
+
         <?php
-            
+            // Lesen Sie die Daten aus der Datei und zeigen Sie die Artikel an
+            $file = 'posts.json';
+            $articles = json_decode(file_get_contents($file), true);
+
+            foreach ($articles as $article) {
+                echo '<div class="card" style="width: 18rem;">';
+                echo '<img src="' . $article['image'] . '" class="card-img-top" alt="...">';
+                echo '<div class="card-body">';
+                echo '<h5 class="card-title">' . $article['title'] . '</h5>';
+                echo '<p class="card-text">' . $article['content'] . '</p>';
+                echo '<p class="card-text">' . $article['date'] . '</p>';
+                echo '<p class="card-text">' . $article['author'] . '</p>';
+                echo '</div>';
+                echo '</div>';
+            }
+          /*$file = 'posts.txt';
+            $articles = file_get_contents($file);
+            echo nl2br($articles);
+          */  
+          /*  
             if(isset($_SESSION["posts"])){
                 // Printing out the post objects in $_SESSION["posts"]
                 if(count($_SESSION["posts"])>0) {
@@ -50,9 +71,10 @@
                     }
                 }
             }
-            
-        ?>
+        */    
+        ?> 
     </main>
+
 </body>
 
 </html>

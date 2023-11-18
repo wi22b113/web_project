@@ -44,8 +44,6 @@
             $_SESSION["firstname"] = $fname;
             $_SESSION["lastname"] = $lname;
             $_SESSION["email"] = $email;
-            $_SESSION["userdata_message"] = "Erfolgreich Aktualisiert!";
-            header("Location: master_data.php"); /* Redirect browser */
         }
     }
 
@@ -77,8 +75,6 @@
 
         if($passwd1Err=="" and $passwd2Err==""){
             $_SESSION["password"] = $passwd1;
-            $_SESSION["passwd_message"] = "Erfolgreich Aktualisiert!";
-            header("Location: master_data.php"); /* Redirect browser */
         }
 
     }elseif($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd"){
@@ -197,13 +193,17 @@
                                 <button class="btn btn-outline-primary" type="submit">Aktualisieren</button>
                                 <br><br>
                                 <?php
-                                    echo $_SESSION["userdata_message"];
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata"
+                                    && $fnameErr=="" && $lnameErr=="" && $emailErr=="" && $usernameErr=="") {
+                                    echo "Stammdaten erfolgreich aktualisiert!";
+                                    }
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+
 
             <h2 class="center mb-3">Passwort</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
@@ -248,9 +248,11 @@
                                 <br><br>
                                 </div>
                             <?php endif ?> 
-
                             <?php
-                                echo $_SESSION["passwd_message"];
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd" 
+                                 && $oldPasswdErr=== "" && isset($_POST["password1"]) && isset($_POST["password2"]) && $passwd1Err==="" && $passwd2Err==="") {
+                                echo "Passwort erfolgreich aktualisiert!";
+                                }
                             ?>
                         </div>
                     </div>

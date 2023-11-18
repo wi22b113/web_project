@@ -68,8 +68,7 @@
             if ($pictureErr=="") {
                 if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {    
 
-                    
-                    // Laden Sie das Originalbild 
+                    // Laden des Originalbilds 
                     if($imageFileType == "jpg" || $imageFileType == "jpeg"){
                         $source_image = imagecreatefromjpeg($target_file);
                     }else{
@@ -77,24 +76,23 @@
                     }
                     
                     $source_width = imagesx($source_image);
-                    $thumbnail_width = 426;
                     $source_height = imagesy($source_image);
+                    $thumbnail_width = 426;
                     $thumbnail_height = 240;
-                    // Erstellen Sie das Thumbnail
+                    // Erstellen des Thumbnails
                     $thumbnail = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 
-                    // Skalieren Sie das Originalbild auf die Größe des Thumbnails
+                    // Skalieren des Originalbilds auf die Größe des Thumbnails
                     imagecopyresized($thumbnail, $source_image, 0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $source_width, $source_height);
                     
-                    
-                    // Speichern Sie das Thumbnail
+                    // Speichern des Thumbnails
                     if($imageFileType == "jpg" || $imageFileType == "jpeg"){
                         imagejpeg($thumbnail, $resized_file);
                     }else{
                         imagepng($thumbnail, $resized_file);
                     }
                     
-                    //Freigeben von Speicher
+                    //Freigeben des Speichers
                     imagedestroy($source_image);
                     imagedestroy($thumbnail);
                 } else {
@@ -103,46 +101,17 @@
             }
                     
         }
-        // Laden Sie das Bild hoch und speichern Sie den Pfad
-        //$target_dir = "./uploads/";
-        //$target_file = $target_dir . basename($_FILES["file"]["name"]);
-        //move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
+
+        //Wenn keine Fehler erkannt wurden wird ein Json File erzeugt und darin die Daten eines Posts gespeichert und serverseitig abgelegt
         if($titleErr=="" && $textErr=="" && $pictureErr==""){
             $file = 'posts.json';
             $current = file_get_contents($file);
             $current = json_decode($current, true);
-            $current[] = ['title' => $_POST['title'], 'content' => $_POST['text'], 'image' => $resized_file, 'date' => $datumString, 'author' => $_POST['author']];
+            $current[] = ['title' => $title, 'content' => $text, 'image' => $resized_file, 'date' => $datumString, 'author' => $author];
             file_put_contents($file, json_encode($current));
         }
     }
 
-        /*
-        if(isset($_SESSION["posts"]) && $titleErr=="" && $textErr=="" && $pictureErr==""){
-            $post = new Post();
-            $post->set_title($title);
-            $post->set_text($text);
-            $post->set_author($author);
-            $post->set_date($datum);
-            if(sanitize_input($_FILES["file"]["size"]) != 0){
-                $post->set_picture($target_file);
-            }
-            $_SESSION['posts'][] = $post;
-            header("Location: posts.php"); //Redirect browser 
-        }elseif($titleErr=="" && $textErr=="" && $pictureErr==""){
-            $post = new Post();
-            $post->set_title($title);
-            $post->set_text($text);
-            $post->set_author($author);
-            $post->set_date($datum);
-            if(sanitize_input($_FILES["file"]["size"]) != 0){
-                $post->set_picture($target_file);
-            }
-            $_SESSION['posts'] = array($post);
-            header("Location: posts.php"); // Redirect browser 
-            
-        }*/
-    
-    
 ?> 
 
 <!DOCTYPE html>

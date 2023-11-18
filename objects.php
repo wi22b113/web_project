@@ -81,6 +81,9 @@ class Booking {
   }
 
 }
+//Diese Klasse wird nicht mehr verwendet
+//Unser erster Ansatz war die Posts in der Session zu speichern, dafür haben wir Objekte der Klasse Post erstellt. 
+//Jetzt speichern wir aber die Post in einem .json File daher werden die Objekte nicht mehr benötigt.
 class Post {
   // Properties
   private $title;
@@ -129,8 +132,6 @@ class Post {
     "Bild: " . $this->get_picture() . "<br>" .
     "Author: " . $this->get_author() . "<br>" .
     "Datum: " . $this->get_date()->format("d.m.Y H:i") . "<br><br>";
-
-
   }
 
   

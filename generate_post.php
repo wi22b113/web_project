@@ -40,7 +40,6 @@
         }else{
             $file_name = sanitize_input(basename(($_FILES["file"]["name"])));
             $target_file = $targetDir . sanitize_input(basename(($_FILES["file"]["name"])));
-            $resized_file = $resizedDir . sanitize_input(basename(($_FILES["file"]["name"])));
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 
@@ -49,10 +48,12 @@
                 $pictureErr = "File is not an image.";
             }
 
-            // Check if file already exists
-            //if (file_exists($target_file)) {
-            //    $pictureErr =  "Sorry, file already exists.";
-            //}
+            // Check if file already exists, if it exists, add a Unix-Timestamp to the filename to prevent overwriting
+            if (file_exists($target_file)) {
+                $target_file = $targetDir . pathinfo($target_file,PATHINFO_FILENAME) . "_" . time() . "." . $imageFileType;
+            }
+
+            $resized_file = $resizedDir . basename($target_file);
 
             // Check file size (if > 50MB)
             if (sanitize_input($_FILES["file"]["size"]) > 50000000) {

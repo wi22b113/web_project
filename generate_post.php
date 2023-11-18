@@ -7,7 +7,6 @@
     // define variables and set to empty values
     $textErr = $titleErr = $pictureErr = "";
     $text = $title = $file_name = "";
-    $percent = 0.5;
     
     $targetDir = "./uploads/";
     $resizedDir = "./resized/";
@@ -33,6 +32,7 @@
 
         $datum = new DateTime();
         $datum->setTimestamp(sanitize_input($_POST["date"]));
+        $datumString = $datum->format("d.m.Y H:i");
 
         $author = sanitize_input($_POST["author"]);
         if(sanitize_input($_FILES["file"]["size"]) == 0){
@@ -77,9 +77,9 @@
                     }
                     
                     $source_width = imagesx($source_image);
-                    $thumbnail_width = $source_width*$percent;
+                    $thumbnail_width = 426;
                     $source_height = imagesy($source_image);
-                    $thumbnail_height = $source_height*$percent;
+                    $thumbnail_height = 240;
                     // Erstellen Sie das Thumbnail
                     $thumbnail = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 
@@ -94,9 +94,9 @@
                         imagepng($thumbnail, $resized_file);
                     }
                     
-                    // Freigeben von Speicher
-                    //imagedestroy($source_image);
-                    //imagedestroy($thumbnail);
+                    //Freigeben von Speicher
+                    imagedestroy($source_image);
+                    imagedestroy($thumbnail);
                 } else {
                     $pictureErr = "Sorry, there was an error uploading your file.";
                 }
@@ -111,7 +111,7 @@
             $file = 'posts.json';
             $current = file_get_contents($file);
             $current = json_decode($current, true);
-            $current[] = ['title' => $_POST['title'], 'content' => $_POST['text'], 'image' => $resized_file, 'date' => $_POST['date'], 'author' => $_POST['author']];
+            $current[] = ['title' => $_POST['title'], 'content' => $_POST['text'], 'image' => $resized_file, 'date' => $datumString, 'author' => $_POST['author']];
             file_put_contents($file, json_encode($current));
         }
     }
@@ -216,6 +216,15 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Post erstellen</button>
                     </form>
+                    <div class="mt-3 center">
+                        <?php
+                            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                if($titleErr=="" && $textErr=="" && $pictureErr==""){
+                                    echo "<h3>Danke für deinen Post!</h3>";
+                                }
+                            }
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>

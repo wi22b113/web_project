@@ -40,39 +40,50 @@
     </header>
     <main>
 
-
+    <div class="container-fluid">
         <?php
-            // Lesen Sie die Daten aus der Datei und zeigen Sie die Artikel an
-            $file = 'posts.json';
-            $articles = json_decode(file_get_contents($file), true);
+                // Lesen Sie die Daten aus der Datei und zeigen Sie die Artikel an
+                $file = 'posts.json';
+                $articles = json_decode(file_get_contents($file), true);
+                $articles = array_reverse($articles);
 
-            foreach ($articles as $article) {
-                echo '<div class="card" style="width: 18rem;">';
-                echo '<img src="' . $article['image'] . '" class="card-img-top" alt="...">';
-                echo '<div class="card-body">';
-                echo '<h5 class="card-title">' . $article['title'] . '</h5>';
-                echo '<p class="card-text">' . $article['content'] . '</p>';
-                echo '<p class="card-text">' . $article['date'] . '</p>';
-                echo '<p class="card-text">' . $article['author'] . '</p>';
-                echo '</div>';
-                echo '</div>';
-            }
-          /*$file = 'posts.txt';
-            $articles = file_get_contents($file);
-            echo nl2br($articles);
-          */  
-          /*  
-            if(isset($_SESSION["posts"])){
-                // Printing out the post objects in $_SESSION["posts"]
-                if(count($_SESSION["posts"])>0) {
-                    $count = count($_SESSION["posts"]);
-                    for($i=$count-1; $i>=0; $i--) {
-                        echo $_SESSION["posts"][$i];
+                foreach ($articles as $article) {
+                    echo '<div class="row justify-content-center">';
+                    echo '<div class="col-md-6 mb-3 justify-content-center">';
+                    echo '<div class="card">';
+                    echo '<img src="' . $article['image'] . '" class="card-img-top" alt="...">';
+                    echo '<div class="card-body">';
+                    echo '<h5 class="card-title">' . $article['title'] . '</h5>';
+                    echo '<p class="card-text">' . $article['content'] . '</p>';
+                    echo '<p class="card-text">' . "Autor: " . $article['author'] . '</p>';
+                    echo '<p class="card-text">' . "Erstelldatum: " . $article['date'] . '</p>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+                
+
+            /*$file = 'posts.txt';
+                $articles = file_get_contents($file);
+                echo nl2br($articles);
+            */  
+            /*  
+                if(isset($_SESSION["posts"])){
+                    // Printing out the post objects in $_SESSION["posts"]
+                    if(count($_SESSION["posts"])>0) {
+                        $count = count($_SESSION["posts"]);
+                        for($i=$count-1; $i>=0; $i--) {
+                            echo $_SESSION["posts"][$i];
+                        }
                     }
                 }
-            }
-        */    
-        ?> 
+            */    
+            ?>
+
+    </div> 
+
+        
     </main>
 
 </body>

@@ -30,7 +30,7 @@
 
         $author = sanitize_input($_POST["author"]);
 
-        if($_FILES["file"]["size"] !== 0){
+        if(sanitize_input($_FILES["file"]["size"]) != 0){
             $file_name = sanitize_input(basename(($_FILES["file"]["name"])));
             $target_file = $targetDir . sanitize_input(basename(($_FILES["file"]["name"])));
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -72,7 +72,7 @@
             $post->set_text($text);
             $post->set_author($author);
             $post->set_date($datum);
-            if($_FILES["file"]["size"] !== 0){
+            if(sanitize_input($_FILES["file"]["size"]) != 0){
                 $post->set_picture($target_file);
             }
             $_SESSION['posts'][] = $post;
@@ -83,7 +83,7 @@
             $post->set_text($text);
             $post->set_author($author);
             $post->set_date($datum);
-            if($_FILES["file"]["size"] !== 0){
+            if(sanitize_input($_FILES["file"]["size"]) != 0){
                 $post->set_picture($target_file);
             }
             $_SESSION['posts'] = array($post);
@@ -92,7 +92,6 @@
     }
     
 ?> 
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -150,7 +149,7 @@
                         
                         <div class="mb-3">
                             <label for="file" class="form-label">Bild Upload</label>  
-                            <input class="form-control <?php if($pictureErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" type="file" id="file" name="file" value="<?php echo $file_name;?>" />
+                            <input class="form-control <?php if($pictureErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" type="file" id="file" name="file" />
                                 <div class="invalid-feedback">
                                     <?php if($pictureErr!=""){echo $pictureErr;} ?> 
                                 </div>

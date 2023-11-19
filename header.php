@@ -11,14 +11,14 @@
                         Suites & Rooms
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="./sr_master_suite.php">Master Suite</a></li>
-                        <li><a class="dropdown-item" href="./sr_junior_suite.php">Junior Suite</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=master_suite">Master Suite</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=junior_suite">Junior Suite</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="./sr_superior_room.php">Superior Room</a></li>
-                        <li><a class="dropdown-item" href="./sr_luxury_room.php">Luxury Room</a></li>
-                        <li><a class="dropdown-item" href="./sr_luxury_e_room.php">Luxury Extended Room</a>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=superior_room">Superior Room</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=luxury_room">Luxury Room</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=luxury_e_room">Luxury Extended Room</a>
                         </li>
                     </ul>
                 </li>

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "common_functions.php";
+    include "./logic/common_functions.php";
 ?>
 
 <!DOCTYPE html>
@@ -27,14 +27,14 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
     
     <body>    
         <header>
             <?php
             $currentPage = 'Index';
-            include "header.php";
+            include "./elements/header.php";
             ?>
             <h1>Hotel Tramonto</h1>
         </header>
@@ -42,19 +42,19 @@
             <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="img/Hotel-1.jpeg" class="d-block w-100" alt="Bild des Hotels">
+                        <img src="img/hotel/Hotel-1.jpeg" class="d-block w-100" alt="Bild des Hotels">
                     </div>
                     <div class="carousel-item">
-                        <img src="img/Hotel-2.jpeg" class="d-block w-100" alt="Bild des Hotels">
+                        <img src="img/hotel/Hotel-2.jpeg" class="d-block w-100" alt="Bild des Hotels">
                     </div>
                     <div class="carousel-item">
-                        <img src="img/Hotel-3.jpeg" class="d-block w-100" alt="Bild des Hotels">
+                        <img src="img/hotel/Hotel-3.jpeg" class="d-block w-100" alt="Bild des Hotels">
                     </div>
                     <div class="carousel-item">
-                        <img src="img/Hotel-4.jpeg" class="d-block w-100" alt="Bild des Hotels">
+                        <img src="img/hotel/Hotel-4.jpeg" class="d-block w-100" alt="Bild des Hotels">
                     </div>
                     <div class="carousel-item">
-                        <img src="img/Hotel-5.jpeg" class="d-block w-100" alt="Bild des Hotels">
+                        <img src="img/hotel/Hotel-5.jpeg" class="d-block w-100" alt="Bild des Hotels">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -67,9 +67,7 @@
                 </button>
             </div>
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 
 </html>

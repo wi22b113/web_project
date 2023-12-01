@@ -1,5 +1,13 @@
 <?php
+    
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
 
+    // Prepared statement
+    $sqlInsert = "INSERT INTO Users (`sex`, `firstname` , `lastname`, `email`, `username`, `password`) VALUES (?,?,?,?,?,?)";
+    $insert_stmt = $connection->prepare($sqlInsert);
+    $insert_stmt->bind_param("ssssss", $gender, $fname, $lname, $email, $username, $hashedPw);
+    
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = "";
@@ -60,6 +68,10 @@
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $passwd1;
             $_SESSION["bookingNumber"] = 0;
+
+            $hashedPw = password_hash($passwd1, PASSWORD_DEFAULT);
+            $insert_stmt->execute();
+
             header("Location: master_data.php"); /* Redirect browser */
         }
     }

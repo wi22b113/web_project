@@ -50,9 +50,9 @@
                                 <label for="gender"></label>
                                 <select class="form-select border-primary mb-3" id="gender" name="gender" aria-label="gender">
                                     <option value "" disabled selected>Geschlecht</option>
-                                    <option value="female" <?php if (isset($gender) && $gender=="female") echo "selected";?> >weiblich</option>
-                                    <option value="male" <?php if (isset($gender) && $gender=="male") echo "selected";?>>männlich</option>
-                                    <option value="other" <?php if (isset($gender) && $gender=="other") echo "selected";?>>divers</option>
+                                    <option <?php if (isset($gender) && $gender=="female") echo "selected";?> >weiblich</option>
+                                    <option <?php if (isset($gender) && $gender=="male") echo "selected";?>>männlich</option>
+                                    <option <?php if (isset($gender) && $gender=="other") echo "selected";?>>divers</option>
                                 </select>
                             </div>
                             <div class="form-floating mb-3">

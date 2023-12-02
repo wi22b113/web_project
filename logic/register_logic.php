@@ -7,6 +7,9 @@
     $sqlInsert = "INSERT INTO Users (`sex`, `firstname` , `lastname`, `email`, `username`, `password`) VALUES (?,?,?,?,?,?)";
     $insert_stmt = $connection->prepare($sqlInsert);
     $insert_stmt->bind_param("ssssss", $gender, $fname, $lname, $email, $username, $hashedPw);
+
+    $sqlSelect = "SELECT username FROM Users";
+    $select_stmt = $connection->prepare($sqlSelect);
     
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
@@ -37,6 +40,10 @@
                 $emailErr = "Ungültiges Email Format";
             }
         }
+
+        $select_stmt->execute();
+        $select_stmt->bind_result($username);
+        $select_stmt->fetch();
 
         if (empty($_POST["username"])) {
             $usernameErr = "Bitte wählen Sie einen Usernamen";

@@ -39,7 +39,7 @@
             $_SESSION["lastname"] = $lastname;
             $_SESSION["email"] = $email;
             $_SESSION["password"] = $passwd;
-            $_SESSION["admin"] = $admin;   
+            $_SESSION["admin"] = $admin;
             $_SESSION["bookingNumber"] = 0;      
             header("Location: master_data.php"); // Redirect browser 
         }else{

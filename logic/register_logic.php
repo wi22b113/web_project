@@ -6,10 +6,12 @@
     // Prepared statement
     $sqlInsert = "INSERT INTO Users (`sex`, `firstname` , `lastname`, `email`, `username`, `password`) VALUES (?,?,?,?,?,?)";
     $insert_stmt = $connection->prepare($sqlInsert);
-    $insert_stmt->bind_param("ssssss", $gender, $fname, $lname, $email, $username, $hashedPw);
+    $insert_stmt->bind_param("ssssss", $gender, $fname, $lname, $email, $input_username, $hashedPw);
 
-    $sqlSelect = "SELECT username FROM Users";
+    $sqlSelect = "SELECT username FROM Users WHERE username=?";
     $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("s", $input_username);
+
     
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
@@ -41,16 +43,19 @@
             }
         }
 
-        $select_stmt->execute();
-        $select_stmt->bind_result($username);
-        $select_stmt->fetch();
 
         if (empty($_POST["username"])) {
             $usernameErr = "Bitte wählen Sie einen Usernamen";
         }else {
-            $username = sanitize_input($_POST["username"]);
+            $input_username = sanitize_input($_POST["username"]);
+            //Check if username is already taken
+            $select_stmt->execute();
+            $select_stmt->bind_result($username);
+            $select_stmt->fetch();
+            if($username!=""){
+                $usernameErr = "Username bereits vergeben";
+            }
         }
-
 
         if (empty($_POST["password1"])) {
             $passwd1Err = "Bitte wählen Sie ein Passwort";
@@ -68,7 +73,7 @@
         }
 
         if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr=="" and $passwd1Err=="" and $passwd2Err==""){
-            $_SESSION["user"] = $username;
+            $_SESSION["user"] = $input_username;
             $_SESSION["gender"] = $gender;
             $_SESSION["firstname"] = $fname;
             $_SESSION["lastname"] = $lname;

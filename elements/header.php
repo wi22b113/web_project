@@ -61,7 +61,7 @@
                     echo "</li> ";
                     echo "<li class=\"nav-item\">";
                     echo "<a class=\"nav-link\""; 
-                    echo "aria-current=\"page\" href=\"?logout=true\">Logout</a>";
+                    echo "aria-current=\"page\" href=\"?logout=true\">Hello " . $_SESSION['firstname'] . ", Logout?</a>";
                     echo "</li> ";
                 } 
                 ?> 

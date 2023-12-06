@@ -28,5 +28,8 @@ if($stmt->execute()){
     echo "<h1>Failed to insert</h1>";
 }
 
+$stmt->close();
+$connection->close();
+
 
 ?>

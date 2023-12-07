@@ -18,6 +18,7 @@
         if(isset($_POST["submit"])){
             $enteredComment = htmlspecialchars($_POST["comment"]);
             $targetDir = "uploads/";
+            mkdir($targetDir);
             mkdir($targetDir . $userId);
             //FileName = uploads/$userid/cat_$timestamp.png
 

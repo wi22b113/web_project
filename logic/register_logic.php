@@ -1,4 +1,24 @@
 <?php
+
+    /*
+    //Diese Funkion muss noch eingebunden werden
+    function insertDB($user_Id, $file_path, $comment){
+        require_once("dbaccess.php");
+        $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+        //Hier weiter machen
+        $sql = "INSERT INTO tickets (user_id, file_path, comment) VALUES (?,?,?)";
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("iss", $user_Id, $file_path, $comment);
+        if($stmt->execute()){
+            echo "<h1>Hooray, the picture uplaoded successfully</h1>";
+        }else{
+            echo "<h2>Picture faile during DB insert</h2>";
+        }
+        $stmt->close();
+        $connection->close();    
+    }
+    */
     
     require_once("./db/dbaccess.php");
     $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);

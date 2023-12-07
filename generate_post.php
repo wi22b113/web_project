@@ -61,7 +61,7 @@
                         
                         <div class="mb-3">
                             <label for="file" class="form-label">Bild Upload</label>  
-                            <input class="form-control <?php if($pictureErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" type="file" id="file" name="file" />
+                            <input class="form-control <?php if($pictureErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" type="file" accept=".png, .jpg, .jpeg" id="file" name="file" />
                                 <div class="invalid-feedback">
                                     <?php if($pictureErr!=""){echo $pictureErr;} ?> 
                                 </div>

@@ -1,7 +1,7 @@
 <?php
 
     /*
-    //Diese Funkion muss noch eingebunden werden
+    //Die SQL Statements werden in Zukunft noch in Funktionen eingebunden, damit diese übersichtlicher werden
     function insertDB($user_Id, $file_path, $comment){
         require_once("dbaccess.php");
         $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);

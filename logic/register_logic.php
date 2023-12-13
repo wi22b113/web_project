@@ -1,25 +1,45 @@
 <?php
 
+    //Mit den Funktionen funktioniert es leider nicht??????
     /*
-    //Die SQL Statements werden in Zukunft noch in Funktionen eingebunden, damit diese übersichtlicher werden
-    function insertDB($user_Id, $file_path, $comment){
-        require_once("dbaccess.php");
+    function insertUserDB($gender_f, $fname_f, $lname_f, $email_f, $input_username_f, $hashedPw_f){
+        require_once("./db/dbaccess.php");
         $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
 
-        //Hier weiter machen
-        $sql = "INSERT INTO tickets (user_id, file_path, comment) VALUES (?,?,?)";
-        $stmt = $connection->prepare($sql);
-        $stmt->bind_param("iss", $user_Id, $file_path, $comment);
-        if($stmt->execute()){
-            echo "<h1>Hooray, the picture uplaoded successfully</h1>";
+        $sqlInsert = "INSERT INTO Users (`sex`, `firstname` , `lastname`, `email`, `username`, `password`) VALUES (?,?,?,?,?,?)";
+        $insert_stmt = $connection->prepare($sqlInsert);
+        $insert_stmt->bind_param("ssssss", $gender_f, $fname_f, $lname_f, $email_f, $input_username_f, $hashedPw_f);
+        if($insert_stmt->execute()){
         }else{
-            echo "<h2>Picture faile during DB insert</h2>";
+            echo "<h1>Something went wrong</h1>";
         }
-        $stmt->close();
+        $insert_stmt->close();
         $connection->close();    
     }
+
+    function usernameTakenDB($input_username_f){
+        require_once("./db/dbaccess.php");
+        $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+        $sqlSelect = "SELECT username FROM Users WHERE username=?";
+        $select_stmt = $connection->prepare($sqlSelect);
+        $select_stmt->bind_param("s", $input_username_f);
+
+        $select_stmt->execute();
+        $select_stmt->bind_result($username);
+        $select_stmt->fetch();
+
+        $select_stmt->close();
+        $connection->close();    
+        
+        if($username!=""){
+            return true;
+        }else{
+            return false;
+        }
+    }
     */
-    
+
     require_once("./db/dbaccess.php");
     $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
 
@@ -73,8 +93,17 @@
             $select_stmt->bind_result($username);
             $select_stmt->fetch();
             if($username!=""){
+               $usernameErr = "Username bereits vergeben";
+            }
+            $select_stmt->close();
+
+            /*
+            //Mit den Funktionen funktioniert es leider nicht
+            if(usernameTakenDB($input_username)){
                 $usernameErr = "Username bereits vergeben";
             }
+            */
+                
         }
 
         if (empty($_POST["password1"])) {
@@ -102,7 +131,12 @@
             $_SESSION["bookingNumber"] = 0;
 
             $hashedPw = password_hash($passwd1, PASSWORD_DEFAULT);
+
             $insert_stmt->execute();
+            $insert_stmt->close();
+            $connection->close(); 
+            //Mit den Funktionen funktioniert es leider nicht
+            //insertUserDB($gender, $fname, $lname, $email, $input_username, $hashedPw);
 
             header("Location: master_data.php"); /* Redirect browser */
         }

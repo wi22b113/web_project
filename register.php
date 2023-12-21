@@ -76,7 +76,7 @@
                                 <label for="email">Email Adresse</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="a" value="<?php echo $username;?>" required>
+                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="a" value="<?php echo $input_username;?>" required>
                                 <div class="invalid-feedback">
                                     <?php if($usernameErr!=""){echo $usernameErr;} ?> 
                                 </div>
@@ -100,6 +100,11 @@
                                 <button class="btn btn-outline-danger" type="reset">Reset</button>
                                 <button class="btn btn-outline-primary" type="submit">Registrieren</button>
                             </div>
+                            <?php
+                            if ($_SERVER["REQUEST_METHOD"] == "POST" && $registerMessage !== "") {
+                                echo "<h2 class='text-danger'>" . $registerMessage . "</h2>";
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>

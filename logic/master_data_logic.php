@@ -1,25 +1,13 @@
 <?php
 
-    require_once("./db/dbaccess.php");
-    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
-
-    // Prepared statement
-    $sqlUpdate = "UPDATE Users SET `sex` = ?, `firstname` = ?, `lastname` = ?, `email` = ?, `username` = ? WHERE `Users`.`id` = ?";
-    $update_stmt = $connection->prepare($sqlUpdate);
-    $update_stmt->bind_param("sssssi", $gender, $fname, $lname, $email, $input_username, $id);
-
-    $sqlUpdatePasswd = "UPDATE Users SET `password` = ? WHERE `Users`.`id` = ?";
-    $update_passwd_stmt = $connection->prepare($sqlUpdatePasswd);
-    $update_passwd_stmt->bind_param("si", $hashedPw, $id);
-
-    $sqlSelect = "SELECT username FROM Users WHERE username=?";
-    $select_stmt = $connection->prepare($sqlSelect);
-    $select_stmt->bind_param("s", $input_username);
+    //Inkludieren der SQL Funktionen
+    include "./logic/sql_logic.php";
 
 
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = $oldPasswdErr = "";
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = $oldPasswd ="";
+    $updateUserDataMessage = $updateUserPasswdMessage = "";
 
     $id = $_SESSION["id"];
 
@@ -55,35 +43,33 @@
             $input_username = sanitize_input($_POST["username"]);
             if(!($input_username == $_SESSION["user"])){
                 //Check if username is already taken
-                $select_stmt->execute();
-                $select_stmt->bind_result($username);
-                $select_stmt->fetch();
-                if($username!=""){
+                if(usernameTakenDB($input_username)){
                     $usernameErr = "Username bereits vergeben";
                 }
             }
         }
 
         if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr==""){
-            $_SESSION["user"] = $input_username;
-            $_SESSION["gender"] = $gender;
-            $_SESSION["firstname"] = $fname;
-            $_SESSION["lastname"] = $lname;
-            $_SESSION["email"] = $email;
-            $update_stmt->execute();
+            if(updateUserDataDB($gender, $fname, $lname, $email, $input_username, $id)){
+                $updateUserDataMessage = "Stammdaten erfolgreich aktualisiert!";
+            }else{
+                $updateUserDataMessage = "Oops, da ist etwas schiefgelaufen!";
+            }
         }
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
 
+
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
-        if(password_verify($oldPasswd, $_SESSION["password"])){
+        if(password_verify($oldPasswd, getUserPasswdDB($_SESSION["user"]))){
             $passwordcheck = true; 
         }else{
             $passwordcheck = false;
             $oldPasswdErr = "Falsches Passwort!"; 
         }
+
         
         if (empty($_POST["password1"])) {
             $passwd1Err = "Bitte wählen Sie ein Passwort";
@@ -100,21 +86,24 @@
             $passwd1Err = $passwd2Err = "Passwörter sind nicht gleich";
         }
 
-        if($passwd1Err=="" and $passwd2Err==""){
+        if($passwd1Err=="" and $passwd2Err=="" && $oldPasswdErr==""){
             $hashedPw = password_hash($passwd1, PASSWORD_DEFAULT);
-            $_SESSION["password"] = $hashedPw;
-            $update_passwd_stmt->execute();
+            if(updateUserPasswdDB($hashedPw, $id)){
+                $updateUserPasswdMessage = "Passwort erfolgreich aktualisiert!";
+            }else{
+                $updateUserPasswdMessage = "Oops, da ist etwas schiefgelaufen!";
+            }
         }
 
     }elseif($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd"){
         
         $oldPasswd = sanitize_input($_POST["oldPasswd"]);
 
-        if(password_verify($oldPasswd, $_SESSION["password"])){
-            $passwordcheck = true; 
+        if(password_verify($oldPasswd, getUserPasswdDB($_SESSION["user"]))){
+            $passwordcheck = true;
         }else{
             $passwordcheck = false;
-            $oldPasswdErr = "Falsches Passwort!"; 
+            $oldPasswdErr = "Falsches Passwort!";
         }
 
     }

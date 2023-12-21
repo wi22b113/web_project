@@ -5,6 +5,7 @@
     // define variables and set to empty values
     $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = "";
+    $registerMessage = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -32,12 +33,10 @@
             }
         }
 
-
         if (empty($_POST["username"])) {
             $usernameErr = "Bitte wählen Sie einen Usernamen";
         }else {
             $input_username = sanitize_input($_POST["username"]);
-
             if(usernameTakenDB($input_username)){
                 $usernameErr = "Username bereits vergeben";
             }
@@ -59,19 +58,13 @@
         }
 
         if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr=="" and $passwd1Err=="" and $passwd2Err==""){
-            $_SESSION["user"] = $input_username;
-            $_SESSION["gender"] = $gender;
-            $_SESSION["firstname"] = $fname;
-            $_SESSION["lastname"] = $lname;
-            $_SESSION["email"] = $email;
-            $_SESSION["password"] = $passwd1;
-            $_SESSION["bookingNumber"] = 0;
-
             $hashedPw = password_hash($passwd1, PASSWORD_DEFAULT);
 
-            insertUserDB($gender, $fname, $lname, $email, $input_username, $hashedPw);
-
-            header("Location: master_data.php"); /* Redirect browser */
+            if(insertUserDB($gender, $fname, $lname, $email, $input_username, $hashedPw)){
+                header("Location: master_data.php"); /* Redirect browser */
+            }else{
+                $registerMessage = "Oops, da ist etwas schiefgelaufen!";
+            }
         }
     }
 

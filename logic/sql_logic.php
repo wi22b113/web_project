@@ -8,7 +8,7 @@
  * @param $email_f
  * @param $input_username_f
  * @param $hashedPw_f
- * @return void
+ * @return bool
  */
 function insertUserDB($gender_f, $fname_f, $lname_f, $email_f, $input_username_f, $hashedPw_f){
     global $dbHost,$dbUsername, $dbPassword, $dbName;
@@ -18,11 +18,21 @@ function insertUserDB($gender_f, $fname_f, $lname_f, $email_f, $input_username_f
     $sqlInsert = "INSERT INTO Users (`sex`, `firstname` , `lastname`, `email`, `username`, `password`) VALUES (?,?,?,?,?,?)";
     $insert_stmt = $connection->prepare($sqlInsert);
     $insert_stmt->bind_param("ssssss", $gender_f, $fname_f, $lname_f, $email_f, $input_username_f, $hashedPw_f);
-    if(!$insert_stmt->execute()) {
-        echo "<h1>Something went wrong</h1>";
+    if($insert_stmt->execute()) {
+        $_SESSION["user"] = $input_username_f;
+        $_SESSION["gender"] = $gender_f;
+        $_SESSION["firstname"] = $fname_f;
+        $_SESSION["lastname"] = $lname_f;
+        $_SESSION["email"] = $email_f;
+        $_SESSION["bookingNumber"] = 0;
+        $insert_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $insert_stmt->close();
+        $connection->close();
+        return false;
     }
-    $insert_stmt->close();
-    $connection->close();
 }
 
 /**
@@ -76,13 +86,11 @@ function loginUserDB($input_username_f, $input_passwd_f){
     $connection->close();
 
     if(password_verify($input_passwd_f, $password)){
-        $_SESSION["id"] = $id;
         $_SESSION["user"] = $username;
         $_SESSION["gender"] = $sex;
         $_SESSION["firstname"] = $firstname;
         $_SESSION["lastname"] = $lastname;
         $_SESSION["email"] = $email;
-        $_SESSION["password"] = $password;
         $_SESSION["admin"] = $admin;
         $_SESSION["bookingNumber"] = 0;
         return true;
@@ -90,3 +98,87 @@ function loginUserDB($input_username_f, $input_passwd_f){
         return false;
     }
 }
+
+/**
+ * @param $gender_f
+ * @param $fname_f
+ * @param $lname_f
+ * @param $email_f
+ * @param $username_f
+ * @param $id_f
+ * @return bool --> True if userdata was successfully updated, False if not
+ */
+function updateUserDataDB($gender_f, $fname_f, $lname_f, $email_f, $username_f, $id_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlUpdate = "UPDATE Users SET `sex` = ?, `firstname` = ?, `lastname` = ?, `email` = ?, `username` = ? WHERE `Users`.`id` = ?";
+    $update_stmt = $connection->prepare($sqlUpdate);
+    $update_stmt->bind_param("sssssi", $gender_f, $fname_f, $lname_f, $email_f, $username_f, $id_f);
+
+    if($update_stmt->execute()) {
+        $_SESSION["user"] = $username_f;
+        $_SESSION["gender"] = $gender_f;
+        $_SESSION["firstname"] = $fname_f;
+        $_SESSION["lastname"] = $lname_f;
+        $_SESSION["email"] = $email_f;
+        $update_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $update_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
+/**
+ * @param $input_username_f
+ * @return mixed --> Returns the password of the given user
+ */
+function getUserPasswdDB($input_username_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT password FROM Users WHERE username=?";
+    $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("s", $input_username_f);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($password);
+    $select_stmt->fetch();
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $password;
+}
+
+/**
+ * @param $hashedPw_f
+ * @param $id_f
+ * @return bool --> True if the user-password was updated, False if not
+ */
+function updateUserPasswdDB($hashedPw_f, $id_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlUpdatePasswd = "UPDATE Users SET `password` = ? WHERE `Users`.`id` = ?";
+    $update_stmt = $connection->prepare($sqlUpdatePasswd);
+    $update_stmt->bind_param("si", $hashedPw_f, $id_f);
+
+    if($update_stmt->execute()) {
+        $update_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $update_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
+

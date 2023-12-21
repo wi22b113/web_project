@@ -204,15 +204,15 @@
                     <div class="col-md-6 mt-5 justify-content-start">
                         <?php
                             if($selectedPage=="master_suite"){
-                                echo "EINE NACHT AB<br>666 € PRO ZIMMER<br>INKL. FRÜHSTÜCK";
+                                echo "EINE NACHT AB<br>666 € PRO ZIMMER";
                             }elseif($selectedPage=="junior_suite"){
-                                echo "EINE NACHT AB<br>368 € PRO ZIMMER<br>INKL. FRÜHSTÜCK";
+                                echo "EINE NACHT AB<br>368 € PRO ZIMMER";
                             }elseif($selectedPage=="superior_room"){
-                                echo "EINE NACHT AB<br>278 € PRO ZIMMER<br>INKL. FRÜHSTÜCK";
+                                echo "EINE NACHT AB<br>278 € PRO ZIMMER";
                             }elseif($selectedPage=="luxury_room"){
-                                echo "EINE NACHT AB<br>296 € PRO ZIMMER<br>INKL. FRÜHSTÜCK";
+                                echo "EINE NACHT AB<br>296 € PRO ZIMMER";
                             }elseif($selectedPage=="luxury_e_room"){
-                                echo "EINE NACHT AB<br>323 € PRO ZIMMER<br>INKL. FRÜHSTÜCK";
+                                echo "EINE NACHT AB<br>323 € PRO ZIMMER";
                             }
                         ?>
                     </div>

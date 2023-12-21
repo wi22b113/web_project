@@ -30,7 +30,6 @@
         }else{
             $passwdErr = "Falscher Username oder Passwort";
             $usernameErr = " "; //Damit auch das Username Eingabefeld rot erscheint
-
         }
 
     }

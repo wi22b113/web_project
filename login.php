@@ -46,7 +46,7 @@
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $username;?>" required>
+                                    <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $input_username;?>" required>
                                     <div class="invalid-feedback">
                                         <?php if($usernameErr!=""){echo $usernameErr;} ?> 
                                     </div>

@@ -108,9 +108,8 @@
                                 <button class="btn btn-outline-primary" type="submit">Aktualisieren</button>
                                 <br><br>
                                 <?php
-                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata"
-                                    && $fnameErr=="" && $lnameErr=="" && $emailErr=="" && $usernameErr=="") {
-                                    echo "Stammdaten erfolgreich aktualisiert!";
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata") {
+                                    echo $updateUserDataMessage;
                                     }
                                 ?>
                             </div>
@@ -164,9 +163,8 @@
                                 </div>
                             <?php endif ?> 
                             <?php
-                                if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd" 
-                                 && $oldPasswdErr=== "" && isset($_POST["password1"]) && isset($_POST["password2"]) && $passwd1Err==="" && $passwd2Err==="") {
-                                echo "Passwort erfolgreich aktualisiert!";
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd") {
+                                    echo $updateUserPasswdMessage;
                                 }
                             ?>
                         </div>

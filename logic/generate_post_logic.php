@@ -13,7 +13,7 @@
         mkdir($resizedDir);
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION["admin"]===1) {
 
         $text = sanitize_input($_POST["text"]);
         if (empty($text)) {

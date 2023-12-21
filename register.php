@@ -2,7 +2,6 @@
     session_start();
     include "./logic/common_functions.php";
     include "./logic/register_logic.php";
-
 ?> 
 
 <!DOCTYPE html>

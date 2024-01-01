@@ -284,5 +284,62 @@ function insertBookingsOptionsDB($bookingsID_f, $optionsID_f){
     }
 }
 
+/**
+ * @param $input_username_f
+ * @return array --> Diese Funktion gibt die Buchungen für einen spezifischen Usernamen aus
+ */
+function getUserBookings($input_username_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "
+    SELECT 
+        B.id AS booking_id,
+        B.arrival_date,
+        B.departure_date,
+        DATEDIFF(B.departure_date, B.arrival_date) AS duration_days,
+        ((R.price + IFNULL(SUM(O.price), 0)) * DATEDIFF(B.departure_date, B.arrival_date)) AS total_price_duration
+    FROM 
+        Bookings B
+    INNER JOIN 
+        Rooms R ON B.room_id_fk = R.id
+    LEFT JOIN 
+        AT_Bookings_Options AO ON B.id = AO.bookings_id_fk
+    LEFT JOIN 
+        Options O ON AO.options_id_fk = O.id
+    INNER JOIN 
+        Users U ON B.user_id_fk = U.id
+    WHERE 
+        U.username = ?
+    GROUP BY 
+        B.id, R.price, B.arrival_date, B.departure_date
+    ";
+    $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("s", $input_username_f);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($booking_id,$arrival_date, $departure_date, $duration_days, $total_price);
+
+    $bookings = array();
+
+    while ($select_stmt->fetch()) {
+        $booking = array(
+            'booking_id' => $booking_id,
+            'arrival_date' => $arrival_date,
+            'departure_date' => $departure_date,
+            'duration_days' => $duration_days,
+            'total_price' => $total_price
+        );
+        $bookings[] = $booking;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $bookings;
+
+}
+
 
 

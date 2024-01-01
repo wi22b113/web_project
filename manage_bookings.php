@@ -107,17 +107,7 @@
                                 }
                                 ?>
                                 <?php
-                                    // Printing out the booking objects in $_SESSION["bookings"]
-                                    if(isset($_SESSION["bookings"])) {
-
-                                        $count = count($_SESSION['bookings']);
-                                        echo "<h3>Meine Buchungen (Summe: " . $count .")</h3><br>";
-
-                                        for($i=0; $i<$count; $i++) {
-                                            echo $_SESSION['bookings'][$i];
-                                        }
-                                    }
-
+                                    displayBookings(getUserBookings($_SESSION["user"]));
                                 ?>
                             </div>
                         </div>

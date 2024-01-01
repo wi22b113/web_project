@@ -62,7 +62,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if($roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
-        if(insertBookingDB($roomID, $arrivalDate, $departureDate, $state, $includesBreakfast, $includesParking, $bringsDog, $_SESSION["userID"])){
+        if(insertBookingDB($roomID, $arrivalDate, $departureDate, $state, $_SESSION["userID"])){
+            if($includesBreakfast==1){
+                $bookingID = getBookingID($arrivalDate, $departureDate, $_SESSION["userID"]);
+                insertBookingsOptionsDB($bookingID, 1);
+            }
+            if($includesParking==1){
+                $bookingID = getBookingID($arrivalDate, $departureDate, $_SESSION["userID"]);
+                insertBookingsOptionsDB($bookingID, 2);
+            }
+            if($bringsDog==1){
+                $bookingID = getBookingID($arrivalDate, $departureDate, $_SESSION["userID"]);
+                insertBookingsOptionsDB($bookingID, 3);
+            }
             $bookingMessage = "Buchung erfolgreich übermittelt!";
         }else{
             $bookingMessage = "Oops, da ist etwas schiefgelaufen!";

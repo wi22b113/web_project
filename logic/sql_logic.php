@@ -79,7 +79,7 @@ function loginUserDB($input_username_f, $input_passwd_f){
     $select_stmt->bind_param("s", $input_username_f);
 
     $select_stmt->execute();
-    $select_stmt->bind_result($id, $sex, $firstname, $lastname, $email, $username, $password, $admin);
+    $select_stmt->bind_result($id, $sex, $firstname, $lastname, $email, $username, $password, $admin, $active);
     $select_stmt->fetch();
 
     $select_stmt->close();
@@ -193,14 +193,14 @@ function updateUserPasswdDB($hashedPw_f, $id_f){
  * @param $userID_f
  * @return bool
  */
-function insertBookingDB($roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $breakfast_f, $parking_f, $dog_f, $userID_f){
+function insertBookingDB($roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f){
     global $dbHost,$dbUsername, $dbPassword, $dbName;
     require_once("./db/dbaccess.php");
     $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
 
-    $sqlInsert = "INSERT INTO Bookings (`room_id_fk`, `arrival_date` , `departure_date`, `booking_state`, `breakfast`, `parking`, `dog`, `user_id_fk`) VALUES (?,?,?,?,?,?,?,?)";
+    $sqlInsert = "INSERT INTO Bookings (`room_id_fk`, `arrival_date` , `departure_date`, `booking_state`, `user_id_fk`) VALUES (?,?,?,?,?)";
     $insert_stmt = $connection->prepare($sqlInsert);
-    $insert_stmt->bind_param("isssiiii", $roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $breakfast_f, $parking_f, $dog_f, $userID_f);
+    $insert_stmt->bind_param("isssi", $roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f);
     if($insert_stmt->execute()) {
         $insert_stmt->close();
         $connection->close();
@@ -234,5 +234,55 @@ function getUserID($input_username_f){
 
     return $id;
 }
+
+/**
+ * @param $arrivalDate_f
+ * @param $departureDate_f
+ * @param $userID_f
+ * @return mixed --> Returns the BookingsID of the given booking
+ */
+function getBookingID($arrivalDate_f, $departureDate_f, $userID_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT id FROM Bookings WHERE arrival_date=? AND departure_date=? AND user_id_fk=?";
+    $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("ssi", $arrivalDate_f, $departureDate_f, $userID_f);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($id);
+    $select_stmt->fetch();
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $id;
+}
+
+/**
+ * @param $bookingsID_f
+ * @param $optionsID_f
+ * @return bool --> Inserts into the Auxiliary Table for the m:n Relation between Bookings and Options
+ */
+function insertBookingsOptionsDB($bookingsID_f, $optionsID_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlInsert = "INSERT INTO AT_Bookings_Options (`bookings_id_fk`, `options_id_fk`) VALUES (?,?)";
+    $insert_stmt = $connection->prepare($sqlInsert);
+    $insert_stmt->bind_param("ii", $bookingsID_f, $optionsID_f);
+    if($insert_stmt->execute()) {
+        $insert_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $insert_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
 
 

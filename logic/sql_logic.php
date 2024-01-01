@@ -20,11 +20,11 @@ function insertUserDB($gender_f, $fname_f, $lname_f, $email_f, $input_username_f
     $insert_stmt->bind_param("ssssss", $gender_f, $fname_f, $lname_f, $email_f, $input_username_f, $hashedPw_f);
     if($insert_stmt->execute()) {
         $_SESSION["user"] = $input_username_f;
+        $_SESSION["userID"] = getUserID($input_username_f);
         $_SESSION["gender"] = $gender_f;
         $_SESSION["firstname"] = $fname_f;
         $_SESSION["lastname"] = $lname_f;
         $_SESSION["email"] = $email_f;
-        $_SESSION["bookingNumber"] = 0;
         $insert_stmt->close();
         $connection->close();
         return true;
@@ -87,12 +87,12 @@ function loginUserDB($input_username_f, $input_passwd_f){
 
     if(password_verify($input_passwd_f, $password)){
         $_SESSION["user"] = $username;
+        $_SESSION["userID"] = $id;
         $_SESSION["gender"] = $sex;
         $_SESSION["firstname"] = $firstname;
         $_SESSION["lastname"] = $lastname;
         $_SESSION["email"] = $email;
         $_SESSION["admin"] = $admin;
-        $_SESSION["bookingNumber"] = 0;
         return true;
     }else{
         return false;
@@ -179,6 +179,60 @@ function updateUserPasswdDB($hashedPw_f, $id_f){
         $connection->close();
         return false;
     }
+}
+
+/**
+ * This function inserts a booking into the database
+ * @param $roomID_f
+ * @param $arrivalDate_f
+ * @param $departureDate_f
+ * @param $bookingState_f
+ * @param $breakfast_f
+ * @param $parking_f
+ * @param $dog_f
+ * @param $userID_f
+ * @return bool
+ */
+function insertBookingDB($roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $breakfast_f, $parking_f, $dog_f, $userID_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlInsert = "INSERT INTO Bookings (`room_id_fk`, `arrival_date` , `departure_date`, `booking_state`, `breakfast`, `parking`, `dog`, `user_id_fk`) VALUES (?,?,?,?,?,?,?,?)";
+    $insert_stmt = $connection->prepare($sqlInsert);
+    $insert_stmt->bind_param("isssiiii", $roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $breakfast_f, $parking_f, $dog_f, $userID_f);
+    if($insert_stmt->execute()) {
+        $insert_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $insert_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
+/**
+ * @param $input_username_f
+ * @return mixed --> Returns the UserID of the given user
+ */
+function getUserID($input_username_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT id FROM Users WHERE username=?";
+    $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("s", $input_username_f);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($id);
+    $select_stmt->fetch();
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $id;
 }
 
 

@@ -50,11 +50,11 @@
                                 <label for="room"></label>
                                 <select class="mb-3 form-select <?php if($roomErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="room" name="room" aria-label="room" required>
                                     <option value "" disabled selected>Zimmer Kategorie</option>
-                                    <option <?php if ($errorActive && isset($room) && $room=="Master Suite") echo "selected";?> >Master Suite</option>
-                                    <option <?php if ($errorActive && isset($room) && $room=="Junior Suite") echo "selected";?> >Junior Suite</option>
-                                    <option <?php if ($errorActive && isset($room) && $room=="Superior Room") echo "selected";?> >Superior Room</option>
-                                    <option <?php if ($errorActive && isset($room) && $room=="Luxury Room") echo "selected";?> >Luxury Room</option>
-                                    <option <?php if ($errorActive && isset($room) && $room=="Luxury Extended Room") echo "selected";?> >Luxury Extended Room</option>
+                                    <option value="1" <?php if ($errorActive && isset($room) && $room=="1") echo "selected";?> >Master Suite</option>
+                                    <option value="2" <?php if ($errorActive && isset($room) && $room=="2") echo "selected";?> >Junior Suite</option>
+                                    <option value="3" <?php if ($errorActive && isset($room) && $room=="3") echo "selected";?> >Superior Room</option>
+                                    <option value="4" <?php if ($errorActive && isset($room) && $room=="4") echo "selected";?> >Luxury Room</option>
+                                    <option value="5" <?php if ($errorActive && isset($room) && $room=="5") echo "selected";?> >Luxury Extended Room</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     <?php if($roomErr!=""){echo $roomErr;} ?> 
@@ -101,6 +101,11 @@
                                 <button class="btn btn-outline-danger" type="reset">Reset</button>
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
+                                <?php
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && $bookingMessage !== "") {
+                                    echo "<h2 class='text-danger'>" . $bookingMessage . "</h2>";
+                                }
+                                ?>
                                 <?php
                                     // Printing out the booking objects in $_SESSION["bookings"]
                                     if(isset($_SESSION["bookings"])) {

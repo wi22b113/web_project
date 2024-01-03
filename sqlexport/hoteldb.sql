@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 01, 2024 at 06:07 PM
+-- Generation Time: Jan 03, 2024 at 05:26 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,17 +42,22 @@ INSERT INTO `AT_Bookings_Options` (`id`, `bookings_id_fk`, `options_id_fk`) VALU
 (2, 4, 2),
 (3, 5, 3),
 (4, 7, 3),
-(5, 8, 1),
-(6, 8, 2),
-(7, 8, 3),
-(8, 9, 1),
-(9, 9, 2),
-(10, 9, 3),
 (11, 10, 1),
 (12, 10, 2),
 (13, 11, 1),
 (14, 11, 2),
-(15, 11, 3);
+(15, 11, 3),
+(16, 12, 1),
+(17, 12, 2),
+(18, 13, 1),
+(19, 13, 2),
+(20, 13, 3),
+(21, 14, 1),
+(22, 14, 2),
+(23, 16, 2),
+(24, 17, 1),
+(25, 17, 3),
+(26, 18, 1);
 
 -- --------------------------------------------------------
 
@@ -65,7 +70,8 @@ CREATE TABLE `Bookings` (
   `room_id_fk` int(11) NOT NULL,
   `arrival_date` date NOT NULL,
   `departure_date` date NOT NULL,
-  `booking_state` enum('new','confirmed','cancelled','') NOT NULL,
+  `booking_state` enum('neu','bestätigt','storniert','') NOT NULL,
+  `booking_datetime` datetime NOT NULL,
   `user_id_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -73,17 +79,22 @@ CREATE TABLE `Bookings` (
 -- Dumping data for table `Bookings`
 --
 
-INSERT INTO `Bookings` (`id`, `room_id_fk`, `arrival_date`, `departure_date`, `booking_state`, `user_id_fk`) VALUES
-(2, 1, '2024-01-09', '2024-01-17', 'new', 28),
-(3, 3, '2024-01-23', '2024-01-24', 'new', 28),
-(4, 2, '2024-01-09', '2024-01-12', 'new', 29),
-(5, 3, '2024-01-22', '2024-01-23', 'new', 29),
-(6, 4, '2024-01-25', '2024-01-28', 'new', 29),
-(7, 5, '2024-01-15', '2024-01-17', 'new', 29),
-(8, 5, '2024-01-16', '2024-01-18', 'new', 29),
-(9, 4, '2024-01-02', '2024-01-03', 'new', 29),
-(10, 5, '2024-01-16', '2024-01-17', 'new', 29),
-(11, 1, '2024-01-02', '2024-01-04', 'new', 30);
+INSERT INTO `Bookings` (`id`, `room_id_fk`, `arrival_date`, `departure_date`, `booking_state`, `booking_datetime`, `user_id_fk`) VALUES
+(2, 1, '2024-01-09', '2024-01-17', 'bestätigt', '0000-00-00 00:00:00', 28),
+(3, 3, '2024-01-23', '2024-01-24', 'bestätigt', '0000-00-00 00:00:00', 28),
+(4, 2, '2024-01-09', '2024-01-12', 'bestätigt', '0000-00-00 00:00:00', 29),
+(5, 3, '2024-01-22', '2024-01-23', 'bestätigt', '0000-00-00 00:00:00', 29),
+(6, 4, '2024-01-25', '2024-01-28', 'bestätigt', '0000-00-00 00:00:00', 29),
+(7, 5, '2024-01-15', '2024-01-17', 'storniert', '0000-00-00 00:00:00', 29),
+(10, 5, '2024-01-16', '2024-01-17', 'bestätigt', '0000-00-00 00:00:00', 29),
+(11, 1, '2024-01-02', '2024-01-04', 'bestätigt', '0000-00-00 00:00:00', 30),
+(12, 4, '2024-01-10', '2024-01-11', 'bestätigt', '0000-00-00 00:00:00', 29),
+(13, 2, '2024-01-16', '2024-01-19', 'bestätigt', '0000-00-00 00:00:00', 29),
+(14, 4, '2024-01-10', '2024-01-12', 'neu', '0000-00-00 00:00:00', 29),
+(15, 3, '2024-01-16', '2024-01-18', 'neu', '2024-01-03 11:46:12', 29),
+(16, 3, '2024-01-31', '2024-02-01', 'neu', '2024-01-03 11:54:40', 29),
+(17, 4, '2024-01-17', '2024-01-27', 'storniert', '2024-01-03 11:56:31', 29),
+(18, 4, '2024-01-17', '2024-01-19', 'storniert', '2024-01-03 11:58:54', 29);
 
 -- --------------------------------------------------------
 
@@ -105,7 +116,7 @@ CREATE TABLE `Options` (
 INSERT INTO `Options` (`id`, `designation`, `price`, `quantity`) VALUES
 (1, 'Frühstück', 25.00, 100),
 (2, 'Parkplatz', 30.00, 100),
-(3, 'Dog', 0.00, 100);
+(3, 'Hund', 0.00, 100);
 
 -- --------------------------------------------------------
 
@@ -169,7 +180,7 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`id`, `sex`, `firstname`, `lastname`, `email`, `username`, `password`, `admin`, `active`) VALUES
-(28, 'männlich', 'Luke', 'Skywalker', 'luke@skywalker.com', 'luke', '$2y$10$CRVWsm6wn8BggmmvlkZQdedMYlePOmjLC18Kv5aFB0HyLNHmTBwRi', 0, 1),
+(28, 'männlich', 'Luke', 'Skywalker', 'luke@skywalker.com', 'luke', '$2y$10$8N3vs6YUJQ29o3R.fTtLdu2Jom3Oq87Uvj0Csqmuk39/UtCYE6Fwq', 0, 1),
 (29, 'weiblich', 'Leia', 'Skywalker', 'leia@skywalker.com', 'Leia', '$2y$10$76vKClfzxedJo9BPgLwFTuAVqQUVDLCPM4AuMgMw8zuMiczLPrXLC', 0, 1),
 (30, 'divers', 'Meister', 'Joda', 'meister@joda.com', 'joda', '$2y$10$iAL203LLWmrxP.S2BRIX7OnQ1C1e2EcFKAkd.qcletycpV1Vfvj6e', 0, 1),
 (31, 'divers', 'AdminVorname', 'AdminNachname', 'admin@admin.com', 'admin', '$2y$10$2oECNp2i74nNHnTZRw85iu9H.EdXz86NhMv0OJYGN2c38pkimKG5i', 1, 1),
@@ -229,13 +240,13 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT for table `AT_Bookings_Options`
 --
 ALTER TABLE `AT_Bookings_Options`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `Bookings`
 --
 ALTER TABLE `Bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `Options`

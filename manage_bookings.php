@@ -41,7 +41,7 @@
             ?>
         </header>
         <main>
-            <h2 class="center mb-3">Buchungen</h2>
+            <?php if ($_SESSION['admin']==0): ?><h2 class="center mb-3">Neue Buchung</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -62,7 +62,7 @@
                             </div>
 
                             <div>
-                                <input type="hidden" id="state" name="state" value="new">
+                                <input type="hidden" id="state" name="state" value="neu">
                             </div>
 
                             <div class="form-floating mb-3">
@@ -102,18 +102,95 @@
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
                                 <?php
-                                if ($_SERVER["REQUEST_METHOD"] == "POST" && $bookingMessage !== "") {
-                                    echo "<h2 class='text-danger'>" . $bookingMessage . "</h2>";
-                                }
-                                ?>
-                                <?php
-                                    displayBookings(getUserBookings($_SESSION["user"]));
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && $bookingMessage !== "") {
+                                        if($bookingMessage == "Buchung erfolgreich übermittelt!"){
+                                            echo "<h2 class='text-primary'>" . $bookingMessage . "</h2>";
+                                        }else{
+                                            echo "<h2 class='text-danger'>" . $bookingMessage . "</h2>";
+                                        }
+                                    }
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <?php
+                        displayUserBookings(getUserBookings($_SESSION["user"]));
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php else: ?>
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class='center mb-3'>Buchungen</h2>
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                            <div>
+                                <label for="filter">Filter (Buchungsstatus):</label>
+                                <select class="mb-3 mt-2 form-select border-primary" id="filter" name="filter" aria-label="filter">
+                                    <option value=""<?php if (isset($filter) && $filter=="") echo "selected";?> >kein Filter</option>
+                                    <option <?php if (isset($filter) && $filter=="neu") echo "selected";?> >neu</option>
+                                    <option <?php if (isset($filter) && $filter=="bestätigt") echo "selected";?> >bestätigt</option>
+                                    <option <?php if (isset($filter) && $filter=="storniert") echo "selected";?> >storniert</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-outline-primary mb-3" type="submit">Filter anwenden</button>
+                        </form>
+                        <?php
+                        if($filter==""){
+                            displayAllBookings(getAllBookings());
+                        }else{
+                            displayAllBookings(getFilteredBookings($filter));
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <h2 class='center mt-3 mb-3'>Buchungsstatus ändern</h2>
+                        <div class="col-md-4">
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                                <div>
+                                    <label for="change_booking_id"></label>
+                                    <select class="mt-2 form-select border-primary" id="change_booking_id" name="change_booking_id" aria-label="booking_id">
+                                        <option value "" disabled selected>Buchungs-ID</option>
+                                        <?php
+                                        $bookingIDArray = getBookingIDs();
+                                        foreach ($bookingIDArray as $bookingID){
+                                            echo "<option>" . $bookingID . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="change_booking_state"></label>
+                                    <select class="mb-3 form-select border-primary" id="change_booking_state" name="change_booking_state" aria-label="change_booking_state">
+                                        <option value "" disabled selected>Buchungsstatus</option>
+                                        <option>neu</option>
+                                        <option>bestätigt</option>
+                                        <option>storniert</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-outline-primary" type="submit">Buchungsstatus ändern</button>
+                                <br><br>
+                                <?php
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && $changeBookingMessage !== "") {
+                                    if($changeBookingMessage == "Status erfolgreich geändert!"){
+                                        echo "<h2 class='text-primary'>" . $changeBookingMessage . "</h2>";
+                                    }else{
+                                        echo "<h2 class='text-danger'>" . $changeBookingMessage . "</h2>";
+                                    }
+                                }
+                                ?>
+                            </form>
+                        </div>
+                </div>
+            </div>
+            <?php endif ?>
         </main>
         <?php include "./elements/footer.php"; ?>
     </body>

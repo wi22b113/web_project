@@ -7,6 +7,7 @@ $roomErr = $arrivalDateErr = $departureDateErr = "";
 $errorActive = false;
 
 $roomID = $arrivalDate = $departureDate = $state = $includesBreakfast = $includesParking = $bringsDog = "";
+$filter = $changeID = $changeState = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -61,8 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bringsDog = 1;
     }
 
+    $datetime = new DateTime();
+    $datetimeFormat = 'Y-m-d H:i:s';
+
     if($roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
-        if(insertBookingDB($roomID, $arrivalDate, $departureDate, $state, $_SESSION["userID"])){
+        if(insertBookingDB($roomID, $arrivalDate, $departureDate, $state, $_SESSION["userID"], $datetime->format($datetimeFormat))){
             if($includesBreakfast==1){
                 $bookingID = getBookingID($arrivalDate, $departureDate, $_SESSION["userID"]);
                 insertBookingsOptionsDB($bookingID, 1);
@@ -81,6 +85,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }else{
         $errorActive = true;
+    }
+
+    if(isset($_POST["filter"])){
+        $filter = sanitize_input($_POST["filter"]);
+    }
+
+    if(isset($_POST["change_booking_id"]) && isset($_POST["change_booking_state"])){
+        $changeID = sanitize_input($_POST["change_booking_id"]);
+        $changeState = sanitize_input($_POST["change_booking_state"]);
+        if(updateBookingStateDB($changeID,$changeState)){
+            $changeBookingMessage = "Status erfolgreich geändert!";
+        }else{
+            $changeBookingMessage = "Oops, da ist etwas schiefgelaufen!";
+        }
     }
 
 }

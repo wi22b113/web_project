@@ -85,7 +85,7 @@ function loginUserDB($input_username_f, $input_passwd_f){
     $select_stmt->close();
     $connection->close();
 
-    if(password_verify($input_passwd_f, $password)){
+    if(password_verify($input_passwd_f, $password) && $active==1){
         $_SESSION["user"] = $username;
         $_SESSION["userID"] = $id;
         $_SESSION["gender"] = $sex;
@@ -123,6 +123,26 @@ function updateUserDataDB($gender_f, $fname_f, $lname_f, $email_f, $username_f, 
         $_SESSION["firstname"] = $fname_f;
         $_SESSION["lastname"] = $lname_f;
         $_SESSION["email"] = $email_f;
+        $update_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $update_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
+function updateUserDataAdminDB($gender_f, $fname_f, $lname_f, $email_f, $username_f, $id_f, $admin_f, $active_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlUpdate = "UPDATE Users SET `sex` = ?, `firstname` = ?, `lastname` = ?, `email` = ?, `username` = ?, `admin` = ?, `active` = ? WHERE `Users`.`id` = ?";
+    $update_stmt = $connection->prepare($sqlUpdate);
+    $update_stmt->bind_param("sssssiii", $gender_f, $fname_f, $lname_f, $email_f, $username_f, $admin_f, $active_f, $id_f);
+
+    if($update_stmt->execute()) {
         $update_stmt->close();
         $connection->close();
         return true;
@@ -193,14 +213,14 @@ function updateUserPasswdDB($hashedPw_f, $id_f){
  * @param $userID_f
  * @return bool
  */
-function insertBookingDB($roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f){
+function insertBookingDB($roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f, $datetime_f){
     global $dbHost,$dbUsername, $dbPassword, $dbName;
     require_once("./db/dbaccess.php");
     $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
 
-    $sqlInsert = "INSERT INTO Bookings (`room_id_fk`, `arrival_date` , `departure_date`, `booking_state`, `user_id_fk`) VALUES (?,?,?,?,?)";
+    $sqlInsert = "INSERT INTO Bookings (`room_id_fk`, `arrival_date` , `departure_date`, `booking_state`, `user_id_fk`, `booking_datetime`) VALUES (?,?,?,?,?,?)";
     $insert_stmt = $connection->prepare($sqlInsert);
-    $insert_stmt->bind_param("isssi", $roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f);
+    $insert_stmt->bind_param("isssis", $roomID_f, $arrivalDate_f, $departureDate_f, $bookingState_f, $userID_f, $datetime_f);
     if($insert_stmt->execute()) {
         $insert_stmt->close();
         $connection->close();
@@ -299,7 +319,11 @@ function getUserBookings($input_username_f){
         B.arrival_date,
         B.departure_date,
         DATEDIFF(B.departure_date, B.arrival_date) AS duration_days,
-        ((R.price + IFNULL(SUM(O.price), 0)) * DATEDIFF(B.departure_date, B.arrival_date)) AS total_price_duration
+        R.designation,
+        GROUP_CONCAT(O.designation SEPARATOR ',<br>') AS booked_options,
+        ((R.price + IFNULL(SUM(O.price), 0)) * DATEDIFF(B.departure_date, B.arrival_date)) AS total_price_duration,
+        B.booking_state,
+        B.booking_datetime
     FROM 
         Bookings B
     INNER JOIN 
@@ -319,7 +343,7 @@ function getUserBookings($input_username_f){
     $select_stmt->bind_param("s", $input_username_f);
 
     $select_stmt->execute();
-    $select_stmt->bind_result($booking_id,$arrival_date, $departure_date, $duration_days, $total_price);
+    $select_stmt->bind_result($booking_id,$arrival_date, $departure_date, $duration_days, $room, $options, $total_price, $booking_state, $booking_datetime);
 
     $bookings = array();
 
@@ -329,7 +353,11 @@ function getUserBookings($input_username_f){
             'arrival_date' => $arrival_date,
             'departure_date' => $departure_date,
             'duration_days' => $duration_days,
-            'total_price' => $total_price
+            'room' => $room,
+            'options' => $options,
+            'total_price' => $total_price,
+            'booking_state' => $booking_state,
+            'booking_datetime' => $booking_datetime
         );
         $bookings[] = $booking;
     }
@@ -338,6 +366,287 @@ function getUserBookings($input_username_f){
     $connection->close();
 
     return $bookings;
+
+}
+
+/**
+ * @return array --> Diese Funktion gibt Alle Buchungen aus
+ */
+function getAllBookings(){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "
+    SELECT 
+        U.id AS user_id,
+        U.username AS username,
+        B.id AS booking_id,
+        B.arrival_date,
+        B.departure_date,
+        DATEDIFF(B.departure_date, B.arrival_date) AS duration_days,
+        R.designation,
+        GROUP_CONCAT(O.designation SEPARATOR ',<br>') AS booked_options,
+        ((R.price + IFNULL(SUM(O.price), 0)) * DATEDIFF(B.departure_date, B.arrival_date)) AS total_price_duration,
+        B.booking_state,
+        B.booking_datetime
+    FROM 
+        Bookings B
+    INNER JOIN 
+        Rooms R ON B.room_id_fk = R.id
+    LEFT JOIN 
+        AT_Bookings_Options AO ON B.id = AO.bookings_id_fk
+    LEFT JOIN 
+        Options O ON AO.options_id_fk = O.id
+    INNER JOIN 
+        Users U ON B.user_id_fk = U.id
+    GROUP BY 
+        U.id, U.username, B.id, R.price, B.arrival_date, B.departure_date
+    ";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($user_id, $username, $booking_id,$arrival_date, $departure_date, $duration_days, $room, $options, $total_price, $booking_state, $booking_datetime);
+
+    $bookings = array();
+
+    while ($select_stmt->fetch()) {
+        $booking = array(
+            'user_id' => $user_id,
+            'username' => $username,
+            'booking_id' => $booking_id,
+            'arrival_date' => $arrival_date,
+            'departure_date' => $departure_date,
+            'duration_days' => $duration_days,
+            'room' => $room,
+            'options' => $options,
+            'total_price' => $total_price,
+            'booking_state' => $booking_state,
+            'booking_datetime' => $booking_datetime
+        );
+        $bookings[] = $booking;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $bookings;
+
+}
+
+/**
+ * @param $filter_f
+ * @return array --> Diese Funktion gibt Alle Buchungen mit einem gewissen Buchungsstatus aus
+ */
+function getFilteredBookings($filter_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "
+    SELECT 
+        U.id AS user_id,
+        U.username AS username,
+        B.id AS booking_id,
+        B.arrival_date,
+        B.departure_date,
+        DATEDIFF(B.departure_date, B.arrival_date) AS duration_days,
+        R.designation,
+        GROUP_CONCAT(O.designation SEPARATOR ',<br>') AS booked_options,
+        ((R.price + IFNULL(SUM(O.price), 0)) * DATEDIFF(B.departure_date, B.arrival_date)) AS total_price_duration,
+        B.booking_state,
+        B.booking_datetime
+    FROM 
+        Bookings B
+    INNER JOIN 
+        Rooms R ON B.room_id_fk = R.id
+    LEFT JOIN 
+        AT_Bookings_Options AO ON B.id = AO.bookings_id_fk
+    LEFT JOIN 
+        Options O ON AO.options_id_fk = O.id
+    INNER JOIN 
+        Users U ON B.user_id_fk = U.id
+    WHERE B.booking_state = '$filter_f'
+    GROUP BY 
+        U.id, U.username, B.id, R.price, B.arrival_date, B.departure_date
+    ";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($user_id, $username, $booking_id,$arrival_date, $departure_date, $duration_days, $room, $options, $total_price, $booking_state, $booking_datetime);
+
+    $bookings = array();
+
+    while ($select_stmt->fetch()) {
+        $booking = array(
+            'user_id' => $user_id,
+            'username' => $username,
+            'booking_id' => $booking_id,
+            'arrival_date' => $arrival_date,
+            'departure_date' => $departure_date,
+            'duration_days' => $duration_days,
+            'room' => $room,
+            'options' => $options,
+            'total_price' => $total_price,
+            'booking_state' => $booking_state,
+            'booking_datetime' => $booking_datetime
+        );
+        $bookings[] = $booking;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $bookings;
+
+}
+
+/**
+ * @return array --> Returns all Data from the Users Table
+ */
+function getAllUsers(){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT * FROM Users";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($user_id,$sex, $fname, $lname, $email, $username, $passwd, $admin, $active);
+
+    $users = array();
+
+    while ($select_stmt->fetch()) {
+        $user = array(
+            'user_id' => $user_id,
+            'sex' => $sex,
+            'firstname' => $fname,
+            'lastname' => $lname,
+            'email' => $email,
+            'username' => $username,
+            'password' => $passwd,
+            'admin' => $admin,
+            'active' => $active,
+            );
+        $users[] = $user;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $users;
+
+}
+
+/**
+ * @return array --> Returns an Array of Booking IDs
+ */
+function getBookingIDs(){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT id FROM Bookings ORDER BY id";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($booking_id);
+
+    $ids = array();
+
+    while ($select_stmt->fetch()) {
+        $ids[] = $booking_id;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $ids;
+
+}
+
+/**
+ * @param $bookingID_f
+ * @param $bookingState_f
+ * @return bool --> Updates the Booking State
+ */
+function updateBookingStateDB($bookingID_f, $bookingState_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlUpdateState = "UPDATE Bookings SET `booking_state` = ? WHERE `id` = ?";
+    $update_stmt = $connection->prepare($sqlUpdateState);
+    $update_stmt->bind_param("si", $bookingState_f, $bookingID_f);
+
+    if($update_stmt->execute()) {
+        $update_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $update_stmt->close();
+        $connection->close();
+        return false;
+    }
+}
+
+/**
+ * @return array --> Returns an Array of User IDs
+ */
+function getUserIDs(){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT id FROM Users ORDER BY id";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($user_id);
+
+    $ids = array();
+
+    while ($select_stmt->fetch()) {
+        $ids[] = $user_id;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $ids;
+
+}
+
+function getOneUser($user_id_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT * FROM Users WHERE id = ?";
+    $select_stmt = $connection->prepare($sqlSelect);
+    $select_stmt->bind_param("i", $user_id_f);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($user_id,$sex, $fname, $lname, $email, $username, $passwd, $admin, $active);
+    $select_stmt->fetch();
+
+    $user = array(
+        'user_id' => $user_id,
+        'sex' => $sex,
+        'firstname' => $fname,
+        'lastname' => $lname,
+        'email' => $email,
+        'username' => $username,
+        'password' => $passwd,
+        'admin' => $admin,
+        'active' => $active,
+    );
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $user;
 
 }
 

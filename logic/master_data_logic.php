@@ -9,7 +9,7 @@
     $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = $oldPasswd ="";
     $updateUserDataMessage = $updateUserPasswdMessage = "";
 
-    $id = $_SESSION["id"];
+    $id = $_SESSION["userID"];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata") {
 

@@ -34,6 +34,71 @@ function insertUserDB($gender_f, $fname_f, $lname_f, $email_f, $input_username_f
         return false;
     }
 }
+/**
+ * This function inserts a user into the database
+ * @param $title_f
+ * @param $content_f
+ * @param $picture_f
+ * @param $picture_alt_f
+ * @param $date_f
+ * @param $user_f
+ * @return bool
+ */
+function insertPostDB($title_f, $content_f, $picture_f, $picture_alt_f, $date_f, $user_f){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlInsert = "INSERT INTO Posts (`title`, `content`, `picture`, `picture_alt`, `date`,`user_id_fk`) VALUES (?,?,?,?,?,?)";
+    $insert_stmt = $connection->prepare($sqlInsert);
+    $insert_stmt->bind_param("sssssi", $title_f, $content_f, $picture_f, $picture_alt_f, $date_f, $user_f);
+
+    if($insert_stmt->execute()) {
+        $insert_stmt->close();
+        $connection->close();
+        return true;
+    }else{
+        $insert_stmt->close();
+        $connection->close();
+        return false;
+    } 
+}
+
+/**
+ * @return array --> Returns all Data from the Post Table
+ */
+function getAllPosts(){
+    global $dbHost,$dbUsername, $dbPassword, $dbName;
+    require_once("./db/dbaccess.php");
+    $connection = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    $sqlSelect = "SELECT * FROM Posts";
+    $select_stmt = $connection->prepare($sqlSelect);
+
+    $select_stmt->execute();
+    $select_stmt->bind_result($id, $title, $content, $picture, $picture_alt, $date, $user_id_fk);
+
+    $posts = array();
+
+    while ($select_stmt->fetch()) {
+        $post = array(
+            'id' => $id,
+            'title' => $title,
+            'content' => $content,
+            'picture' => $picture,
+            'picture_alt' => $picture_alt,
+            'date' => $date,
+            'user_id' => $user_id_fk,
+            );
+        $posts[] = $post;
+    }
+
+    $select_stmt->close();
+    $connection->close();
+
+    return $posts;
+
+}
 
 /**
  * This function prooves if a username is already taken in the database

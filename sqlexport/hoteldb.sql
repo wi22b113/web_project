@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Erstellungszeit: 04. Jan 2024 um 18:05
+-- Erstellungszeit: 04. Jan 2024 um 18:35
 -- Server-Version: 10.4.28-MariaDB
 -- PHP-Version: 8.2.4
 
@@ -65,7 +65,8 @@ CREATE TABLE `Bookings` (
   `room_id_fk` int(11) NOT NULL,
   `arrival_date` date NOT NULL,
   `departure_date` date NOT NULL,
-  `booking_state` enum('new','confirmed','cancelled','') NOT NULL,
+  `booking_state` enum('neu','bestätigt','storniert','') NOT NULL,
+  `booking_datetime` datetime NOT NULL,
   `user_id_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -73,17 +74,17 @@ CREATE TABLE `Bookings` (
 -- Daten für Tabelle `Bookings`
 --
 
-INSERT INTO `Bookings` (`id`, `room_id_fk`, `arrival_date`, `departure_date`, `booking_state`, `user_id_fk`) VALUES
-(2, 1, '2024-01-09', '2024-01-17', 'new', 28),
-(3, 3, '2024-01-23', '2024-01-24', 'new', 28),
-(4, 2, '2024-01-09', '2024-01-12', 'new', 29),
-(5, 3, '2024-01-22', '2024-01-23', 'new', 29),
-(6, 4, '2024-01-25', '2024-01-28', 'new', 29),
-(7, 5, '2024-01-15', '2024-01-17', 'new', 29),
-(8, 5, '2024-01-16', '2024-01-18', 'new', 29),
-(9, 4, '2024-01-02', '2024-01-03', 'new', 29),
-(10, 5, '2024-01-16', '2024-01-17', 'new', 29),
-(11, 1, '2024-01-02', '2024-01-04', 'new', 30);
+INSERT INTO `Bookings` (`id`, `room_id_fk`, `arrival_date`, `departure_date`, `booking_state`, `booking_datetime`, `user_id_fk`) VALUES
+(2, 1, '2024-01-09', '2024-01-17', 'neu', '0000-00-00 00:00:00', 28),
+(3, 3, '2024-01-23', '2024-01-24', 'neu', '0000-00-00 00:00:00', 28),
+(4, 2, '2024-01-09', '2024-01-12', 'neu', '0000-00-00 00:00:00', 29),
+(5, 3, '2024-01-22', '2024-01-23', 'bestätigt', '0000-00-00 00:00:00', 29),
+(6, 4, '2024-01-25', '2024-01-28', 'bestätigt', '0000-00-00 00:00:00', 29),
+(7, 5, '2024-01-15', '2024-01-17', 'neu', '0000-00-00 00:00:00', 29),
+(8, 5, '2024-01-16', '2024-01-18', 'neu', '0000-00-00 00:00:00', 29),
+(9, 4, '2024-01-02', '2024-01-03', 'neu', '0000-00-00 00:00:00', 29),
+(10, 5, '2024-01-16', '2024-01-17', 'neu', '0000-00-00 00:00:00', 29),
+(11, 1, '2024-01-02', '2024-01-04', 'neu', '0000-00-00 00:00:00', 30);
 
 -- --------------------------------------------------------
 
@@ -105,7 +106,7 @@ CREATE TABLE `Options` (
 INSERT INTO `Options` (`id`, `designation`, `price`, `quantity`) VALUES
 (1, 'Frühstück', 25.00, 100),
 (2, 'Parkplatz', 30.00, 100),
-(3, 'Dog', 0.00, 100);
+(3, 'Hund', 0.00, 100);
 
 -- --------------------------------------------------------
 

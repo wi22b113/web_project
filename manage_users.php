@@ -122,12 +122,12 @@
 
                                     <div class="form-check mb-3">
                                         <input type="checkbox" class="form-check-input border-primary" id="admin" name="admin" placeholder="a" <?php if ($userToChange["admin"]=="1"){echo "checked=\"checked\"";} ?>>
-                                        <label class="form-check-label" for="admin">Adminrechte?</label>
+                                        <label class="form-check-label" for="admin">Adminrechte</label>
                                     </div>
 
                                     <div class="form-check mb-3">
                                         <input type="checkbox" class="form-check-input border-primary" id="active" name="active" placeholder="a" <?php if ($userToChange["active"]=="1"){echo "checked=\"checked\"";} ?>>
-                                        <label class="form-check-label" for="active">Aktiv?</label>
+                                        <label class="form-check-label" for="active">Aktiv</label>
                                     </div>
 
                                     <div>

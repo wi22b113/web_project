@@ -115,4 +115,32 @@ function displayAllUsers($usersArray) {
 
     echo "</table>";
 }
+function displayAllPosts($postsArray) {
+    echo "<h2 class='center mb-3'>Liste aller Posts</h2>";
+    echo "<table style='border-collapse: collapse; width: 100%;'>
+            <tr>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Post ID</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Titel</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>inhalt</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Bild</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Bild Text</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Datum</th>
+                <th style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>Author</th>
+            </tr>";
+
+    foreach ($postsArray as $post) {
+        echo "<tr>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['id']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['title']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['content']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['picture']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['picture_alt']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['date']."</td>
+                <td style='border: 1px solid #dddddd; text-align: left; padding: 8px;'>".$post['user_id']."</td>
+                
+              </tr>";
+    }
+
+    echo "</table>";
+}
     

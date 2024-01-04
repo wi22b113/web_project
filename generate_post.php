@@ -72,7 +72,7 @@
                         </div>
 
                         <div>
-                                <input type="hidden" id="author" name="author" value="<?php echo $_SESSION["user"];?>">
+                                <input type="hidden" id="author" name="author" value="<?php echo getUserID($_SESSION["user"]);?>">
                         </div>
                         <button type="submit" class="btn btn-primary">Post erstellen</button>
                     </form>
@@ -80,7 +80,6 @@
                         <?php
                             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 if($titleErr=="" && $textErr=="" && $pictureErr==""){
-                                    echo "<h3>Danke für deinen Post!</h3>";
                                 }
                             }
                         ?>

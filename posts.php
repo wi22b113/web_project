@@ -2,7 +2,7 @@
     include "./logic/objects.php";
     session_start();
     include "./logic/common_functions.php";   
-
+    include "./logic/sql_logic.php";
 ?>
 
 <!DOCTYPE html>
@@ -41,45 +41,35 @@
     <main>
         <div class="container-fluid">
             <?php
+
+                //displayAllPosts(getAllPosts());
                 // Lesen Sie die Daten aus der Datei und zeigen Sie die Artikel an
-                $file = './json/posts.json';
-                $fileContent = file_get_contents($file);
-
-
-                if (!empty($fileContent)) {
-                    $articles = json_decode($fileContent, true);
-                    $articles = array_reverse($articles);
-                    foreach ($articles as $article) {
+                $articles = getAllPosts();
+                $articles = array_reverse($articles); // Dreht das Array um, damit die neuesten Artikel zuerst angezeigt werden
+                if (!empty($articles)) { // Überprüft, ob das Array $articles nicht leer ist
+                    foreach ($articles as $article) { // Durchläuft jedes Element in $articles
                         echo '<div class="row justify-content-center">';
                         echo '<div class="col-md-6 mb-3 justify-content-center">';
                         echo '<div class="card">';
-                        echo '<img src="' . $article['image'] . '" class="card-img-top" alt="...">';
+                        echo '<img src="' . $article['picture'] . '" class="card-img-top" alt=" ... ">';
                         echo '<div class="card-body">';
                         echo '<h5 class="card-title">' . $article['title'] . '</h5>';
                         echo '<p class="card-text">' . $article['content'] . '</p>';
-                        echo '<p class="card-text">' . "Autor: " . $article['author'] . '</p>';
-                        echo '<p class="card-text">' . "Erstelldatum: " . $article['date'] . '</p>';
+                        echo '<p class="card-text">' . "Autor: " . getOneUser($article['user_id'])["username"] . " " . "Erstelldatum: " . $article['date'] . '</p>';
+                        //echo '<p class="card-text">'  '</p>';
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
                     }
+                } else {
+                    echo '<div class="row justify-content-center">';
+                    echo '<div class="col-md-6 mb-3 justify-content-center">';
+                    echo '<h3 class="center"> Keine Posts vorhanden! </h3>';
+                    echo '</div>';
+                    echo '</div>';
+                    
                 }
-                /*$file = 'posts.txt';
-                    $articles = file_get_contents($file);
-                    echo nl2br($articles);
-                */  
-                /*  
-                    if(isset($_SESSION["posts"])){
-                        // Printing out the post objects in $_SESSION["posts"]
-                        if(count($_SESSION["posts"])>0) {
-                            $count = count($_SESSION["posts"]);
-                            for($i=$count-1; $i>=0; $i--) {
-                                echo $_SESSION["posts"][$i];
-                            }
-                        }
-                    }
-                */   
             ?>
         </div> 
     </main>

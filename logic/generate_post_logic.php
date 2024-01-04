@@ -1,4 +1,8 @@
 <?php
+
+    //Inkludieren der SQL Funktionen
+    include "./logic/sql_logic.php";
+
     // define variables and set to empty values
     $textErr = $titleErr = $pictureErr = "";
     $text = $title = $file_name = "";
@@ -30,6 +34,8 @@
         $datumString = $datum->format("d.m.Y H:i");
 
         $author = sanitize_input($_POST["author"]);
+        $picture_alt = $title;
+
         if(sanitize_input($_FILES["file"]["size"]) == 0){
             $pictureErr = "Bitte laden Sie ein Bild hoch";
         }else{
@@ -100,11 +106,13 @@
 
         //Wenn keine Fehler erkannt wurden wird ein Json File erzeugt und darin die Daten eines Posts gespeichert und serverseitig abgelegt
         if($titleErr=="" && $textErr=="" && $pictureErr==""){
-            $file = './json/posts.json';
-            $current = file_get_contents($file);
-            $current = json_decode($current, true);
-            $current[] = ['title' => $title, 'content' => $text, 'image' => $resized_file, 'date' => $datumString, 'author' => $author];
-            file_put_contents($file, json_encode($current));
+            
+            if(insertPostDB($title, $text, $resized_file, $picture_alt, $datumString, $author)){
+                header("Location: posts.php"); /* Redirect browser */
+            }else{
+                $registerMessage = "Oops, da ist etwas schiefgelaufen!";
+            }
+            
         }
     }
 ?>

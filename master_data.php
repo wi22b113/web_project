@@ -1,97 +1,8 @@
 <?php
     session_start();
-    include "common_functions.php";
+    include "./logic/common_functions.php";
+    include "./logic/master_data_logic.php";
 
-    // define variables and set to empty values
-    $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = $oldPasswdErr = "";
-    $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = $oldPasswd ="";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata") {
-
-        $gender = sanitize_input($_POST["gender"]);
-        
-        $fname= sanitize_input($_POST["vorname"]);
-        // check if firstname only contains letters and whitespace
-        if (preg_match("/\d/",$fname)) {
-            $fnameErr = "Keine Ziffern erlaubt";
-        }
-
-        $lname= sanitize_input($_POST["nachname"]);
-        // check if lastname only contains letters and whitespace
-        if (preg_match("/\d/",$lname)) {
-            $lnameErr = "Keine Ziffern erlaubt";
-        }
-
-        if (empty($_POST["email"])) {
-            $emailErr = "Bitte wählen Sie eine Email";
-        } else {
-            $email = sanitize_input($_POST["email"]);
-            // check if email is well-formed
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailErr = "Ungültiges Email Format";
-            }
-        }
-        
-        if (empty($_POST["username"])) {
-            $usernameErr = "Bitte wählen Sie einen Usernamen";
-        } else {
-            $username = sanitize_input($_POST["username"]);
-        }
-
-        if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr==""){
-            $_SESSION["user"] = $username;
-            $_SESSION["gender"] = $gender;
-            $_SESSION["firstname"] = $fname;
-            $_SESSION["lastname"] = $lname;
-            $_SESSION["email"] = $email;
-            $_SESSION["userdata_message"] = "Erfolgreich Aktualisiert!";
-            header("Location: master_data.php"); /* Redirect browser */
-        }
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd" && (isset($_POST["password1"]) || isset($_POST["password2"]))) {
-
-        $oldPasswd = sanitize_input($_POST["oldPasswd"]);
-
-        if($oldPasswd === $_SESSION["password"]){
-            $passwordcheck = true; 
-        }else{
-            $passwordcheck = false;
-            $oldPasswdErr = "Falsches Passwort!";
-        }
-        
-        if (empty($_POST["password1"])) {
-            $passwd1Err = "Bitte wählen Sie ein Passwort";
-        } else {
-            $passwd1 = sanitize_input($_POST["password1"]);
-        }
-
-        if (empty($_POST["password2"])) {
-            $passwd2Err = "Bitte wählen Sie ein Passwort";
-        } else {
-            $passwd2 = sanitize_input($_POST["password2"]);
-        }
-        if ($passwd1!=$passwd2){
-            $passwd1Err = $passwd2Err = "Passwörter sind nicht gleich";
-        }
-
-        if($passwd1Err=="" and $passwd2Err==""){
-            $_SESSION["password"] = $passwd1;
-            $_SESSION["passwd_message"] = "Erfolgreich Aktualisiert!";
-            header("Location: master_data.php"); /* Redirect browser */
-        }
-
-    }elseif($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd"){
-        
-        $oldPasswd = sanitize_input($_POST["oldPasswd"]);
-
-        if($oldPasswd === $_SESSION["password"]){
-            $passwordcheck = true; 
-        }else{
-            $passwordcheck = false;
-            $oldPasswdErr = "Falsches Passwort!";
-        }
-    }
 ?> 
 
 <!DOCTYPE html>
@@ -118,18 +29,34 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <header>
             <?php
             $currentPage = 'Stammdaten';
-            include "header.php";
+            include "./elements/header.php";
             ?>
         </header>
         <main>
-           
+        <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col center mt-5">
+                            <h3>
+                                Hello <?php echo $_SESSION["user"]; ?>
+                                <br>
+                                <br>
+                            </h3>
+                            <p>
+                                Möchtest du ein Zimmer buchen?
+                                Oder möchtest du deine bereits getätigten Buchungen ansehen?
+                                Dann klicke <a class="btn btn-primary" href="./manage_bookings.php" role="button">Hier!</a>
+                            </p>
+                    </div>
+                </div>
+            </div> 
+
             <h2 class="center mb-3">Stammdaten</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
@@ -181,13 +108,16 @@
                                 <button class="btn btn-outline-primary" type="submit">Aktualisieren</button>
                                 <br><br>
                                 <?php
-                                    echo $_SESSION["userdata_message"];
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userdata") {
+                                    echo $updateUserDataMessage;
+                                    }
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+
 
             <h2 class="center mb-3">Passwort</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
@@ -232,9 +162,10 @@
                                 <br><br>
                                 </div>
                             <?php endif ?> 
-
                             <?php
-                                echo $_SESSION["passwd_message"];
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && sanitize_input($_POST["action"]) === "update-userPasswd") {
+                                    echo $updateUserPasswdMessage;
+                                }
                             ?>
                         </div>
                     </div>
@@ -242,8 +173,6 @@
             </form>
 
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 </html>

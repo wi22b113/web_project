@@ -1,38 +1,7 @@
 <?php
     session_start();
-    include "common_functions.php";
-
-    $user = [];
-    $user["admin"] = "admin";
-
-    // define variables and set to empty values
-    $usernameErr = $passwdErr = "";
-    $username = $passwd = "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (empty($_POST["username"])) {
-            $usernameErr = "Bitte wählen Sie einen Usernamen";
-        } else {
-            $username = sanitize_input($_POST["username"]);
-        }
-    
-        if (empty($_POST["password"])) {
-            $passwdErr = "Bitte wählen Sie ein Passwort";
-        } else {
-            $passwd = sanitize_input($_POST["password"]);
-        }
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST" and $usernameErr=="" and $passwdErr=="" and $user[$username] === $passwd) {
-        $_SESSION["user"] = $username;
-        $_SESSION["gender"] = "männlich";
-        $_SESSION["firstname"] = "adminVorname";
-        $_SESSION["lastname"] = "adminNachname";
-        $_SESSION["email"] = "admin@email.com";
-        $_SESSION["password"] = $passwd;
-        $_SESSION["bookingNumber"] = 0;
-    }
-    
+    include "./logic/common_functions.php";
+    include "./logic/login_logic.php"
 ?>
 
 <!DOCTYPE html>
@@ -59,14 +28,14 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <header>
             <?php
             $currentPage = 'Login';
-            include "header.php";
+            include "./elements/header.php";
             ?>
         </header>
         <main>
@@ -77,7 +46,7 @@
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $username;?>" required>
+                                    <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="Username" value="<?php echo $input_username;?>" required>
                                     <div class="invalid-feedback">
                                         <?php if($usernameErr!=""){echo $usernameErr;} ?> 
                                     </div>
@@ -120,8 +89,6 @@
                 </div>
             <?php endif ?> 
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "common_functions.php";
+    include "./logic/common_functions.php";
 ?>
 
 <!DOCTYPE html>
@@ -27,14 +27,14 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <header>
             <?php
             $currentPage = 'Impressum';
-            include "header.php";
+            include "./elements/header.php";
             ?>
             <h1>Impressum</h1>
         </header>
@@ -102,8 +102,6 @@
                 </div>
             </div>
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 </html>

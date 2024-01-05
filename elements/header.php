@@ -11,16 +11,19 @@
                         Suites & Rooms
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="./sr_master_suite.php">Master Suite</a></li>
-                        <li><a class="dropdown-item" href="./sr_junior_suite.php">Junior Suite</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=master_suite">Master Suite</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=junior_suite">Junior Suite</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="./sr_superior_room.php">Superior Room</a></li>
-                        <li><a class="dropdown-item" href="./sr_luxury_room.php">Luxury Room</a></li>
-                        <li><a class="dropdown-item" href="./sr_luxury_e_room.php">Luxury Extended Room</a>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=superior_room">Superior Room</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=luxury_room">Luxury Room</a></li>
+                        <li><a class="dropdown-item" href="./suites_rooms.php?sr=luxury_e_room">Luxury Extended Room</a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php if ($currentPage === 'Posts') {echo 'active';} ?>" aria-current="page" href="./posts.php">Posts</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Impressum') {echo 'active';} ?>" aria-current="page" href="./impressum.php">Impressum</a>
@@ -28,14 +31,17 @@
                 <li class="nav-item">
                     <a class="nav-link <?php if ($currentPage === 'Hilfe') {echo 'active';} ?>" aria-current="page" href="./hilfe.php">Hilfe</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($currentPage === 'Login') {echo 'active';} ?>" aria-current="page" href="./login.php">Login</a>
-                </li>
                 <?php if (!isset($_SESSION["user"])){
                     echo "<li class=\"nav-item\">";
                     echo "<a class=\"nav-link "; 
                     if ($currentPage === 'Registrierung') {echo 'active';} 
                     echo "\" aria-current=\"page\" href=\"./register.php\">Registrierung</a>";
+                    echo "</li> ";
+
+                    echo "<li class=\"nav-item\">";
+                    echo "<a class=\"nav-link "; 
+                    if ($currentPage === 'Login') {echo 'active';} 
+                    echo "\" aria-current=\"page\" href=\"./login.php\">Login</a>";
                     echo "</li> ";
                 }else{
                     echo "<li class=\"nav-item\">";
@@ -48,9 +54,21 @@
                     if ($currentPage === 'Buchungen') {echo 'active';} 
                     echo "\" aria-current=\"page\" href=\"./manage_bookings.php\">Buchungen</a>";
                     echo "</li> ";
+                    if($_SESSION["admin"]===1){
+                        echo "<li class=\"nav-item\">";
+                        echo "<a class=\"nav-link ";
+                        if ($currentPage === 'Users') {echo 'active';}
+                        echo "\" aria-current=\"page\" href=\"./manage_users.php\">Userverwaltung</a>";
+                        echo "</li> ";
+                        echo "<li class=\"nav-item\">";
+                        echo "<a class=\"nav-link ";
+                        if ($currentPage === 'Generate-Post') {echo 'active';}
+                        echo "\" aria-current=\"page\" href=\"./generate_post.php\">Post erstellen</a>";
+                        echo "</li> ";
+                    }
                     echo "<li class=\"nav-item\">";
                     echo "<a class=\"nav-link\""; 
-                    echo "aria-current=\"page\" href=\"?logout=true\">Logout</a>";
+                    echo "aria-current=\"page\" href=\"?logout=true\">Hello " . $_SESSION['user'] . ", Logout?</a>";
                     echo "</li> ";
                 } 
                 ?> 

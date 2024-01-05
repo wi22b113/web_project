@@ -1,75 +1,9 @@
 <?php
-    include "booking.php";
+    include "./logic/objects.php";
     session_start();
-    include "common_functions.php";
+    include "./logic/common_functions.php";
+    include "./logic/manage_bookings_logic.php";
 
-    $roomErr = $arrivalDateErr = $departureDateErr = "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        $booking = new booking();
-
-        $booking->set_number(++$_SESSION["bookingNumber"]);
-
-        if (empty($_POST["room"])) {
-            $roomErr = "Wählen Sie eine Zimmer Kategorie aus!";
-        }else{
-            $room = sanitize_input($_POST["room"]);
-            $booking->set_Room($room);
-        }
-
-        if (empty($_POST["arrivalDate"])) {
-            $arrivalDateErr = "Wählen Sie ein Anreisedatum aus!";
-        }else{
-            $arrivalDate = sanitize_input($_POST["arrivalDate"]);
-            $booking->set_arrivalDate(date_create($arrivalDate));
-        }
-
-        if (empty($_POST["departureDate"])) {
-            $departureDateErr = "Wählen Sie ein Abreisedatum aus!";
-        }else{
-            $departureDate = sanitize_input($_POST["departureDate"]);
-            $booking->set_departureDate(date_create($departureDate));
-        }
-        
-        if(!empty($_POST["arrivalDate"]) && !empty($_POST["departureDate"])){
-            if($booking->get_arrivalDate()>$booking->get_departureDate() || $booking->get_arrivalDate()==$booking->get_departureDate()){
-                $departureDateErr = "Abreisedatum kann nicht <= Anreisedatum sein!";
-            }
-        }
-    
-        if (!empty($_POST["state"])) {
-            $booking->set_State(sanitize_input($_POST["state"]));
-        }
-
-        $breakfast = sanitize_input($_POST["includesBreakfast"]);
-        if (empty($_POST["includesBreakfast"]) || $breakfast != "on") {
-            $booking->set_includesBreakfast(false);
-        }else{
-            $booking->set_includesBreakfast(true);
-        }
-
-        $parking = sanitize_input($_POST["includesParking"]);
-        if (empty($_POST["includesParking"]) || $parking != "on") {
-            $booking->set_includesParking(false);
-        }else{
-            $booking->set_includesParking(true);
-        }
-
-        $bringsDog = sanitize_input($_POST["bringsDog"]);
-        if (empty($_POST["bringsDog"]) || $bringsDog != "on") {
-            $booking->set_bringsDog(false);
-        }else{
-            $booking->set_bringsDog(true);
-        }
-
-        if(isset($_SESSION["bookings"]) && $roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
-            $_SESSION['bookings'][] = $booking;
-        }elseif($roomErr == "" && $arrivalDateErr == "" && $departureDateErr == ""){
-            $_SESSION["bookings"] = array($booking);
-        }
-
-    }
 ?> 
 
 <!DOCTYPE html>
@@ -96,18 +30,18 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <header>
             <?php
             $currentPage = 'Buchungen';
-            include "header.php";
+            include "./elements/header.php";
             ?>
         </header>
         <main>
-            <h2 class="center mb-3">Buchungen</h2>
+            <?php if ($_SESSION['admin']==0): ?><h2 class="center mb-3">Neue Buchung</h2>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -116,11 +50,11 @@
                                 <label for="room"></label>
                                 <select class="mb-3 form-select <?php if($roomErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="room" name="room" aria-label="room" required>
                                     <option value "" disabled selected>Zimmer Kategorie</option>
-                                    <option <?php if (isset($room) && $room=="Master Suite") echo "selected";?> >Master Suite</option>
-                                    <option <?php if (isset($room) && $room=="Junior Suite") echo "selected";?> >Junior Suite</option>
-                                    <option <?php if (isset($room) && $room=="Superior Room") echo "selected";?> >Superior Room</option>
-                                    <option <?php if (isset($room) && $room=="Luxury Room") echo "selected";?> >Luxury Room</option>
-                                    <option <?php if (isset($room) && $room=="Luxury Extended Room") echo "selected";?> >Luxury Extended Room</option>
+                                    <option value="1" <?php if ($errorActive && isset($room) && $room=="1") echo "selected";?> >Master Suite</option>
+                                    <option value="2" <?php if ($errorActive && isset($room) && $room=="2") echo "selected";?> >Junior Suite</option>
+                                    <option value="3" <?php if ($errorActive && isset($room) && $room=="3") echo "selected";?> >Superior Room</option>
+                                    <option value="4" <?php if ($errorActive && isset($room) && $room=="4") echo "selected";?> >Luxury Room</option>
+                                    <option value="5" <?php if ($errorActive && isset($room) && $room=="5") echo "selected";?> >Luxury Extended Room</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     <?php if($roomErr!=""){echo $roomErr;} ?> 
@@ -128,11 +62,11 @@
                             </div>
 
                             <div>
-                                <input type="hidden" id="state" name="state" value="new">
+                                <input type="hidden" id="state" name="state" value="neu">
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control <?php if($arrivalDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="arrivalDate" name="arrivalDate" placeholder="a" value="<?php echo $arrivalDate?>" required>
+                                <input type="date" class="form-control <?php if($arrivalDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="arrivalDate" name="arrivalDate" placeholder="a" <?php if($errorActive){echo "value=\"". $arrivalDate . "\"";}?> required>
                                 <div class="invalid-feedback">
                                     <?php if($arrivalDateErr!=""){echo $arrivalDateErr;} ?> 
                                 </div>
@@ -140,7 +74,7 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control <?php if($departureDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="departureDate" name="departureDate" placeholder="a" value="<?php echo $departureDate?>" required>
+                                <input type="date" class="form-control <?php if($departureDateErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="departureDate" name="departureDate" placeholder="a" <?php if($errorActive){echo "value=\"". $departureDate . "\"";}?> required>
                                 <div class="invalid-feedback">
                                     <?php if($departureDateErr!=""){echo $departureDateErr;} ?> 
                                 </div>
@@ -148,18 +82,18 @@
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a" <?php if ($breakfast=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="includesBreakfast" name="includesBreakfast" placeholder="a" <?php if ($errorActive && $breakfast=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesBreakfast">Frühstück erwünscht?</label>
                             </div>
 
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a" <?php if ($parking=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="includesParking" name="includesParking" placeholder="a" <?php if ($errorActive && $parking=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="includesParking">Parkplatz erwünscht?</label>
                             </div>
 
                             <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a" <?php if ($bringsDog=="on"){echo "checked=\"checked\"";} ?>>
+                                <input type="checkbox" class="form-check-input border-primary" id="bringsDog" name="bringsDog" placeholder="a" <?php if ($errorActive && $bringsDog=="on"){echo "checked=\"checked\"";} ?>>
                                 <label class="form-check-label" for="bringsDog">Ich nehme meinen Hund mit!</label>
                             </div>
 
@@ -168,26 +102,96 @@
                                 <button class="btn btn-outline-primary" type="submit">Buchung Bestätigen</button>
                                 <br><br>
                                 <?php
-                                    // Printing out the variables in $_SESSION["bookings"]
-                                    if(isset($_SESSION["bookings"])) {
-
-                                        $count = count($_SESSION['bookings']);
-                                        echo "<h3>Meine Buchungen (Summe: " . $count .")</h3><br>";
-
-                                        for($i=0; $i<$count; $i++) {
-                                            echo $_SESSION['bookings'][$i];
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST" && $bookingMessage !== "") {
+                                        if($bookingMessage == "Buchung erfolgreich übermittelt!"){
+                                            echo "<h2 class='text-primary'>" . $bookingMessage . "</h2>";
+                                        }else{
+                                            echo "<h2 class='text-danger'>" . $bookingMessage . "</h2>";
                                         }
                                     }
-
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <?php
+                        displayUserBookings(getUserBookings($_SESSION["user"]));
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php else: ?>
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class='center mb-3'>Buchungen</h2>
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                            <div>
+                                <label for="filter">Filter (Buchungsstatus):</label>
+                                <select class="mb-3 mt-2 form-select border-primary" id="filter" name="filter" aria-label="filter">
+                                    <option value=""<?php if (isset($filter) && $filter=="") echo "selected";?> >kein Filter</option>
+                                    <option <?php if (isset($filter) && $filter=="neu") echo "selected";?> >neu</option>
+                                    <option <?php if (isset($filter) && $filter=="bestätigt") echo "selected";?> >bestätigt</option>
+                                    <option <?php if (isset($filter) && $filter=="storniert") echo "selected";?> >storniert</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-outline-primary mb-3" type="submit">Filter anwenden</button>
+                        </form>
+                        <?php
+                        if($filter==""){
+                            displayAllBookings(getAllBookings());
+                        }else{
+                            displayAllBookings(getFilteredBookings($filter));
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <h2 class='center mt-3 mb-3'>Buchungsstatus ändern</h2>
+                        <div class="col-md-4">
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                                <div>
+                                    <label for="change_booking_id"></label>
+                                    <select class="mt-2 form-select border-primary" id="change_booking_id" name="change_booking_id" aria-label="booking_id">
+                                        <option value "" disabled selected>Buchungs-ID</option>
+                                        <?php
+                                        $bookingIDArray = getBookingIDs();
+                                        foreach ($bookingIDArray as $bookingID){
+                                            echo "<option>" . $bookingID . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="change_booking_state"></label>
+                                    <select class="mb-3 form-select border-primary" id="change_booking_state" name="change_booking_state" aria-label="change_booking_state">
+                                        <option value "" disabled selected>Buchungsstatus</option>
+                                        <option>neu</option>
+                                        <option>bestätigt</option>
+                                        <option>storniert</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-outline-primary" type="submit">Buchungsstatus ändern</button>
+                                <br><br>
+                                <?php
+                                if ($_SERVER["REQUEST_METHOD"] == "POST" && $changeBookingMessage !== "") {
+                                    if($changeBookingMessage == "Status erfolgreich geändert!"){
+                                        echo "<h2 class='text-primary'>" . $changeBookingMessage . "</h2>";
+                                    }else{
+                                        echo "<h2 class='text-danger'>" . $changeBookingMessage . "</h2>";
+                                    }
+                                }
+                                ?>
+                            </form>
+                        </div>
+                </div>
+            </div>
+            <?php endif ?>
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 </html>

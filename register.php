@@ -1,70 +1,7 @@
 <?php
     session_start();
-    include "common_functions.php";
-
-    // define variables and set to empty values
-    $fnameErr = $lnameErr = $emailErr = $usernameErr = $passwd1Err = $passwd2Err = "";
-    $gender = $fname = $lname = $email = $username = $passwd1 = $passwd2 = "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        $gender = sanitize_input($_POST["gender"]);
-        
-        $fname= sanitize_input($_POST["vorname"]);
-        // check if firstname only contains letters and whitespace
-        if (preg_match("/\d/",$fname)) {
-            $fnameErr = "Keine Ziffern erlaubt";
-        }
-
-        $lname= sanitize_input($_POST["nachname"]);
-        // check if lastname only contains letters and whitespace
-        if (preg_match("/\d/",$lname)) {
-            $lnameErr = "Keine Ziffern erlaubt";
-        }
-
-        if (empty($_POST["email"])) {
-            $emailErr = "Bitte wählen Sie eine Email";
-        } else {
-            $email = sanitize_input($_POST["email"]);
-            // check if email is well-formed
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailErr = "Ungültiges Email Format";
-            }
-        }
-
-        if (empty($_POST["username"])) {
-            $usernameErr = "Bitte wählen Sie einen Usernamen";
-        }else {
-            $username = sanitize_input($_POST["username"]);
-        }
-
-
-        if (empty($_POST["password1"])) {
-            $passwd1Err = "Bitte wählen Sie ein Passwort";
-        } else {
-            $passwd1 = sanitize_input($_POST["password1"]);
-        }
-
-        if (empty($_POST["password2"])) {
-            $passwd2Err = "Bitte wählen Sie ein Passwort";
-        } else {
-            $passwd2 = sanitize_input($_POST["password2"]);
-        }
-        if ($passwd1!=$passwd2){
-            $passwd1Err = $passwd2Err = "Passwörter sind nicht gleich";
-        }
-
-        if($fnameErr=="" and $lnameErr=="" and $emailErr=="" and $usernameErr=="" and $passwd1Err=="" and $passwd2Err==""){
-            $_SESSION["user"] = $username;
-            $_SESSION["gender"] = $gender;
-            $_SESSION["firstname"] = $fname;
-            $_SESSION["lastname"] = $lname;
-            $_SESSION["email"] = $email;
-            $_SESSION["password"] = $passwd1;
-            $_SESSION["bookingNumber"] = 0;
-            header("Location: login.php"); /* Redirect browser */
-        }
-    }
+    include "./logic/common_functions.php";
+    include "./logic/register_logic.php";
 ?> 
 
 <!DOCTYPE html>
@@ -91,14 +28,14 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <!--Link stylesheet-->
-        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href="./css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <header>
             <?php
             $currentPage = 'Registrierung';
-            include "header.php";
+            include "./elements/header.php";
             ?>
         </header>
         <main>
@@ -112,9 +49,9 @@
                                 <label for="gender"></label>
                                 <select class="form-select border-primary mb-3" id="gender" name="gender" aria-label="gender">
                                     <option value "" disabled selected>Geschlecht</option>
-                                    <option <?php if (isset($gender) && $gender=="weiblich") echo "selected";?> >weiblich</option>
-                                    <option <?php if (isset($gender) && $gender=="männlich") echo "selected";?>>männlich</option>
-                                    <option <?php if (isset($gender) && $gender=="divers") echo "selected";?>>divers</option>
+                                    <option <?php if (isset($gender) && $gender=="female") echo "selected";?> >weiblich</option>
+                                    <option <?php if (isset($gender) && $gender=="male") echo "selected";?>>männlich</option>
+                                    <option <?php if (isset($gender) && $gender=="other") echo "selected";?>>divers</option>
                                 </select>
                             </div>
                             <div class="form-floating mb-3">
@@ -139,7 +76,7 @@
                                 <label for="email">Email Adresse</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="a" value="<?php echo $username;?>" required>
+                                <input type="text" class="form-control <?php if($usernameErr!=""){echo "is-invalid";}else{echo "border-primary";} ?>" id="username" name="username" placeholder="a" value="<?php echo $input_username;?>" required>
                                 <div class="invalid-feedback">
                                     <?php if($usernameErr!=""){echo $usernameErr;} ?> 
                                 </div>
@@ -163,13 +100,16 @@
                                 <button class="btn btn-outline-danger" type="reset">Reset</button>
                                 <button class="btn btn-outline-primary" type="submit">Registrieren</button>
                             </div>
+                            <?php
+                            if ($_SERVER["REQUEST_METHOD"] == "POST" && $registerMessage !== "") {
+                                echo "<h2 class='text-danger'>" . $registerMessage . "</h2>";
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
             </form>
         </main>
-        <footer>
-            &copy 2023
-        </footer>
+        <?php include "./elements/footer.php"; ?>
     </body>
 </html>

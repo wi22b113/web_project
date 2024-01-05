@@ -81,3 +81,58 @@ class Booking {
   }
 
 }
+//Diese Klasse wird nicht mehr verwendet
+//Unser erster Ansatz war die Posts in der Session zu speichern, dafür haben wir Objekte der Klasse Post erstellt. 
+//Jetzt speichern wir aber die Post in einem .json File daher werden die Objekte nicht mehr benötigt.
+class Post {
+  // Properties
+  private $title;
+  private $text;
+  private $picture;
+  private $author;
+  private $date;
+  
+  // Methods
+  function set_title($title) {
+    $this->title = $title;
+  }
+  function get_title() {
+    return $this->title;
+  }
+  function set_text($text) {
+    $this->text = $text;
+  }
+  function get_text() {
+    return $this->text;
+  }
+  function set_picture($picture) {
+    $this->picture = $picture;
+  }
+  function get_picture() {
+    return $this->picture;
+  }
+  function set_author($author) {
+    $this->author = $author;
+  }
+  function get_author() {
+    return $this->author;
+  }
+  function set_date($date) {
+    $this->date = $date;
+  }
+  function get_date() {
+    return $this->date;
+  }
+
+  function __toString()
+  {
+    return 
+    "Titel: " . $this->get_title() . "<br>" .
+    "Text: " . $this->get_text() . "<br>" .
+    "Bild: " . $this->get_picture() . "<br>" .
+    "Author: " . $this->get_author() . "<br>" .
+    "Datum: " . $this->get_date()->format("d.m.Y H:i") . "<br><br>";
+  }
+
+  
+}
